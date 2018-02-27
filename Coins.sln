@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coins", "Coins\Coins.csproj", "{08A94849-68C7-4A25-842F-BA459F22AF79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinsLib", "CoinsLib\CoinsLib.csproj", "{6B803DEB-EC75-4EA9-8196-4325AEE5F630}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinsTest", "..\repos\Coins\CoinsTests\CoinsTest.csproj", "{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinsTest", "CoinsTests\CoinsTest.csproj", "{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
