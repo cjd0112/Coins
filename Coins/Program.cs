@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using CoinsLib.Coins;
+using CoinsLib.LSD;
 using CoinsLib.Values;
 
 namespace Coins
@@ -9,30 +11,13 @@ namespace Coins
     {
         static void Main(string[] args)
         {
-            var coinStatic = CoinFactory.GenerateCoinStatic();
+            var z = new LSDParser("8/1d");
 
-            var combos = CoinCalculator.GenerateAllCombinationsForValue(5, coinStatic).ToArray();
-
-            CoinCalculator.Print(combos, 0, Console.Out);
-
-            foreach (var c in combos)
-            {
-                foreach (var q in CoinCalculator.TotalCoinsForEachCombination(c))
-                {
-                    Console.WriteLine(q);
-                }
-            }
-
-
-            foreach (var q in ValuePartitioner.PossibleWaysToDivideValueInTwo(5))
-            {
-                Console.WriteLine(q);
-            }
-
-
-            int res = CoinCalculator.CalculateTotalWaysToShare(48, coinStatic);
-
-            Console.WriteLine(res);
+            var a = new Stopwatch();
+            a.Start();
+            var res = CoinCalculator2.CalculateTotalWaysToShare(z.ValueInHalfD(), CoinFactory.GenerateCoinStatic());
+            a.Stop();
+            Console.WriteLine($"{res} returned in {a.ElapsedMilliseconds/1000}seconds" );
 
             Console.ReadLine();
 
