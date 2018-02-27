@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coins", "Coins\Coins.csproj", "{08A94849-68C7-4A25-842F-BA459F22AF79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinsLib", "CoinsLib\CoinsLib.csproj", "{6B803DEB-EC75-4EA9-8196-4325AEE5F630}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinsTest", "..\repos\Coins\CoinsTests\CoinsTest.csproj", "{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08A94849-68C7-4A25-842F-BA459F22AF79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A94849-68C7-4A25-842F-BA459F22AF79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A94849-68C7-4A25-842F-BA459F22AF79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A94849-68C7-4A25-842F-BA459F22AF79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B803DEB-EC75-4EA9-8196-4325AEE5F630}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B803DEB-EC75-4EA9-8196-4325AEE5F630}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B803DEB-EC75-4EA9-8196-4325AEE5F630}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B803DEB-EC75-4EA9-8196-4325AEE5F630}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3F8F0EB-6B8A-4193-9EEE-F1DA437F83C0}
+	EndGlobalSection
+EndGlobal
