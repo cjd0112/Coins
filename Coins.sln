@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinsLib", "CoinsLib\CoinsL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinsTest", "CoinsTests\CoinsTest.csproj", "{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scala", "Scala", "{6A18DDD5-3216-49FB-B13E-F3DD9078315F}"
+ProjectSection(SolutionItems) = preProject
+	Scala\Coins.scala = Scala\Coins.scala
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
