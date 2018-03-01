@@ -5,10 +5,19 @@ case class RuntimeCoin(Coin:CoinBase,TotalCoins:Int,Next:Iterable[RuntimeCoin])
         case _:LeafCoin => Array(TotalCoins)
         case _:BranchCoin => Next.flatMap(x=>x.GenerateCoinsPerCombination())
     }
+    
+    def Print(depth:Int) :Unit  = {
+        for (i <- 0 to depth)
+            print("\t")
+        println(s"${Coin.Name} - $TotalCoins") 
+        Next.foreach(x=>x.Print(depth+1))
+    }
 }
  
-abstract class CoinBase(Name:String,Units:Int,Next:CoinBase)
+abstract class CoinBase(Units:Int,Next:CoinBase)
 {
+    val Name:String
+    
     def MinNumCoins(value:Int) :Int = this match {
         case _:LeafCoin => value
         case _:BranchCoin => (value/Units + Next.MinNumCoins(value - (value/Units*Units)))
@@ -16,30 +25,30 @@ abstract class CoinBase(Name:String,Units:Int,Next:CoinBase)
    
     def MaxNumCoins(value:Int) :Int = value
    
-    def GenerateOrderedCombinations(value:Int,totalCoins:Int,continue:(Int)=>Boolean) : Iterable[RuntimeCoin]
+    def GenerateOrderedCombinations(value:Int,totalCoins:Int,continue:(Int,Int)=>Boolean) : Iterable[RuntimeCoin]
    
     
 }
  
-case class LeafCoin(Name:String) extends CoinBase(Name,1,null)
+case class LeafCoin(Name:String) extends CoinBase(1,null)
 {
-    def GenerateOrderedCombinations(value:Int,totalCoins:Int,continue:(Int)=>Boolean) :Iterable[RuntimeCoin] = Array(RuntimeCoin(this,value+totalCoins,null))
+    def GenerateOrderedCombinations(value:Int,totalCoins:Int,continue:(Int,Int)=>Boolean) :Iterable[RuntimeCoin] = Array(RuntimeCoin(this,value+totalCoins,Array[RuntimeCoin]()))
 }
  
-case class BranchCoin(Name:String,Units:Int,Next:CoinBase) extends CoinBase(Name,Units,Next)
+case class BranchCoin(val Name:String,Units:Int,Next:CoinBase) extends CoinBase(Units,Next)
 {
-    def GenerateOrderedCombinations(value:Int,totalCoins:Int,continue:(Int)=>Boolean) : Iterable[RuntimeCoin] =
+    def GenerateOrderedCombinations(value:Int,totalCoins:Int,continue:(Int,Int)=>Boolean) : Iterable[RuntimeCoin] =
     {
         for {
             (numCoins,remainder) <- (value to 0 by -Units).map(n=>(n/Units +totalCoins,value-(n/Units*Units))) 
-            if continue(numCoins)
+            if continue(numCoins,remainder)
         }
             yield RuntimeCoin(this,numCoins,Next.GenerateOrderedCombinations(remainder,numCoins,continue))
     }
     
-    def printableFunc(max:Int)(numCoins:Int) : Boolean = 
+    def printableFunc(max:Int)(numCoins:Int,remainder:Int) : Boolean = 
     {
-        println(numCoins)
+        println(numCoins + " " + remainder)
         numCoins <= max
     }
    
@@ -79,7 +88,14 @@ object MagicPurse {
    
     var coins = MagicPurse.Coins()
     
-    Combinations(coins.MinNumCoins,coins.MaxNumCoins)(i).toList.map(coins.EqualNumCoins).foreach(println)
+    def PP(s:(Iterable[RuntimeCoin],Iterable[RuntimeCoin])) ={
+        println("lhs:")
+        s._1.foreach(x=>x.Print(0))
+        println("rgs:")
+        s._2.foreach(x=>x.Print(0))
+    }
+    
+    Combinations(coins.MinNumCoins,coins.MaxNumCoins)(i).toList.map(coins.EqualNumCoins).foreach(PP)
        
    }
    
