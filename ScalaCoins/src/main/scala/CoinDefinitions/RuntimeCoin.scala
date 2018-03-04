@@ -1,7 +1,7 @@
 package CoinDefinitions
 
 
-case class RuntimeCoin(Coin:CoinBase,numCoinsAtThisLevel:Int,remainder:Int,totalCoins:Int,Next:IndexedSeq[RuntimeCoin])
+case class RuntimeCoin(Coin:CoinBase,value:Int,numCoinsAtThisLevel:Int,remainder:Int,totalCoins:Int,Next:IndexedSeq[RuntimeCoin])
 {
   def GetTotalCoinsForLeafNodes(): IndexedSeq[Int] =
   {
@@ -26,7 +26,7 @@ case class RuntimeCoin(Coin:CoinBase,numCoinsAtThisLevel:Int,remainder:Int,total
   def Print(depth:Int) :Unit  = {
     for (i <- 0 to depth)
       print("\t")
-    println(s"${Coin.Name} - thisLevel=$numCoinsAtThisLevel rem=$remainder total = $totalCoins")
+    println(s"${Coin.Name} - value=$value thisLevel=$numCoinsAtThisLevel rem=$remainder total = $totalCoins")
     Next.foreach(x=>x.Print(depth+1))
   }
 }

@@ -4,11 +4,22 @@ import Util.StopWatch
 
 object MagicPurse {
 
-  def Coins()  = BranchCoin("HC",60,BranchCoin("FL",48,BranchCoin("SH",24, BranchCoin("6P",12,BranchCoin("3P",6,BranchCoin("1P",2,LeafCoin("HP")))))))
+  def Coins()  = BranchCoin("XX",20, BranchCoin("HC",60,BranchCoin("FL",48,BranchCoin("SH",24, BranchCoin("6P",12,BranchCoin("3P",6,BranchCoin("1P",2,LeafCoin("HP"))))))))
 
   def GenerateCombinations(i:Int) :Iterable[Combination] = Combinations(i)
 
-  def Run(i:Int,withPruning:Boolean):Int = {
+  def Run(i:Int): Int = {
+    var coins = Coins()
+    coins.GetNumberCombinations(i)
+  }
+
+
+  def Run3(i:Int) :Int = {
+    Combinations(i).toList.foreach(x=>x.GenerateRuntimeCoinsFromStream(Coins()))
+    1
+  }
+
+  def Run2(i:Int,withPruning:Boolean):Int = {
 
     def PP(s:(Combination,(Iterable[RuntimeCoin],Iterable[RuntimeCoin]))) ={
 
@@ -23,7 +34,7 @@ object MagicPurse {
 
     val t = StopWatch.Time[List[(Combination,(IndexedSeq[RuntimeCoin],IndexedSeq[RuntimeCoin]))]](()=>
       Combinations(i).toList.map(x=>(x,x.GenerateRuntimeCoins(Coins(),withPruning))),"Initial Generation of combinations")
-    t.foreach(PP)
+   // t.foreach(PP)
 
     //t.map(x=>x._1.CalculateMatchingNumberOfCoins(x._2)).foreach(println)
 

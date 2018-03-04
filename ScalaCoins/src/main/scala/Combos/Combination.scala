@@ -17,9 +17,9 @@ case class Combination(lhs:Int,rhs:Int)
     var lhs_coins = combos._1.flatMap(x=>x.GetTotalCoinsForLeafNodes()).filterNot(x=>x==0)
     var rhs_coins = combos._2.flatMap(x=>x.GetTotalCoinsForLeafNodes()).filterNot(x=>x==0)
 
-    println(lhs_coins)
-    println(rhs_coins)
-    println(QuickCountOrderedVector.SumSameNums(lhs_coins,rhs_coins))
+    println(s"$lhs  " + lhs_coins)
+    //println(rhs_coins)
+    //println(QuickCountOrderedVector.SumSameNums(lhs_coins,rhs_coins))
     QuickCountOrderedVector.SumSameNums(lhs_coins,rhs_coins)
 
 
@@ -31,6 +31,38 @@ case class Combination(lhs:Int,rhs:Int)
 
   }
 
+  def AssertOrdered(n:Int,i:List[Int]): Unit = i match{
+    case Nil => Unit
+    case z::rest => {
+      assert(z>=n)
+      AssertOrdered(z,rest)
+    }
+
+  }
+
+
+  def GenerateRuntimeCoinsFromStream(b:CoinBase): Unit =
+  {
+    var cnt = 0
+
+    def streamer (num:Int,min:Int,max:Int) : (runtimeCoinEvents) = {
+      (c:CoinBase,nc:numCoins,r:remainder,tc:totalCoins)=>{
+        cnt = cnt + 1
+        //println(s"$nc - $r - $tc")
+        if (r == 0)
+          {
+          }
+          tc > max
+      }
+    }
+
+    val (lhs_min,lhs_max) = (b.MinNumCoins(lhs),b.MaxNumCoins((lhs)))
+    val (rhs_min,rhs_max) = (b.MinNumCoins(rhs),b.MaxNumCoins((rhs)))
+
+    (b.BreadthFirstStream(lhs,0,streamer(lhs,rhs_min,rhs_max) ),b.BreadthFirstStream(rhs,0,streamer (rhs,lhs_min,lhs_max)))
+
+    println(cnt)
+  }
 
   def GenerateRuntimeCoins(b:CoinBase,prune:Boolean = true) : (IndexedSeq[RuntimeCoin],IndexedSeq[RuntimeCoin]) = {
 
