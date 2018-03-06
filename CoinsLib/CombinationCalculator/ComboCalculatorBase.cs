@@ -5,22 +5,40 @@ using System.Text;
 
 namespace CoinsLib.CombinationCalculator
 {
-    /*
-     * ComboCalculatorBase - what is in common to Brute-Force
-     * and Quick - is that they need to know when to trigger an update
-     * to avoid unnecessary calculations
-     *
-     * as that functionality is in common makes sense to put in a base class
-     *
-     */
+    /// <summary>
+    /// Base class for functionality common to organizing the 
+    /// different combinations of Coins into the right format to process their output. 
+    /// i.e., keeps track of the 'externalNumber' which is 
+    /// the value that is incremented by the calling class. 
+    /// 
+    /// keeps a 'NumberCombinationTicker' which indicates to 
+    /// each calculator when it needs to re-calculate.  
+    /// 
+    /// Relies on caller calling 'increment' to increase
+    /// value on each run ... 
+    /// </summary>
     public abstract class ComboCalculatorBase : IComboCalculator
     {
+        /// <summary>
+        /// Each Coin has its own 'ticker' which keeps track of its 
+        /// current value on each increment. 
+        /// </summary>
         protected List<NumberCombinationsTicker> vals = new List<NumberCombinationsTicker>();
 
+        /// <summary>
+        /// E.g., if combo is '6,3,2' startingNumber will be 11 (our first possible 'hit')
+        /// i.e., we ignore any values below our starting number
+        /// </summary>
         protected int startingNumber;
 
         protected int externalValue;
 
+        /// <summary>
+        /// Ensure the caller uses 'Increment' rather than setting
+        /// a value explicitly - which breaks our optimised model. 
+        /// 'ExternalValue' means we have our own copy of the actual
+        /// value that is currently being calculated. 
+        /// </summary>
         protected void Increment()
         {
             externalValue++;
@@ -32,10 +50,16 @@ namespace CoinsLib.CombinationCalculator
         }
 
 
-        public abstract void Increment(Action<Int32> newNumberOfCoins);
+        public abstract Int64 Increment(ref Int64[] coinCountHolder);
 
         protected Coin coin;
 
+        /// <summary>
+        /// establish our NumberCombinationsTickers for each Unit in the set of Coins. 
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns>this - potential for Fluent interface ... </returns>
+        /// <exception cref="ArgumentException">Various exceptions if assumptions on assumptions are not met</exception>
         public IComboCalculator Initialize(Coin c)
         {
             coin = c;

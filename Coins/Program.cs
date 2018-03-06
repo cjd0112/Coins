@@ -27,10 +27,10 @@ namespace Coins
             var calculationGrid = coins.AllCombinations().ToArray()
                 .Select<CoinsLib.CombinationCalculator.Coin, IComboCalculator>(x =>
                 {
-                    if (x.RequiresBruteForceCalculator())
-                        return new ComboCalculatorBruteForce(x);
+                    if (x.RequiresUnevenFactorCalculator())
+                        return new ComboCalculatorUnevenFactors(x);
                     else
-                        return new ComboCalculatorQuick(x);
+                        return new ComboCalculatorEvenFactors(x);
                 }).ToArray();
 
             //generate results for each number up to our input number minus one

@@ -1,15 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
-namespace CoinsLib.CombinationCalculator
+namespace CoinsLib.CombinationCalculator.Underlying
 {
-    public static class Combinations
+    /// <summary>
+    /// 'CoinsForEvenFactors' expects input representing a value that shows
+    /// the TOTAL number of times the particular unit can go into the value. 
+    /// A table makes it clearer:
+    ///       6    2    1
+    /// 9     1    1    1 
+    /// 10    1    1    2
+    /// 11    1    2    3
+    /// 12    1    2    4
+    /// 13    1    3    5
+    /// 14    1    3    6
+    /// 16    2    4    7
+    /// 
+    /// Given this representation, where the units are successive multiples (as they are except for
+    /// Half-Crown).  The algorithm can grind through each combination using only multiplication and 
+    /// addition. 
+    /// 
+    /// Where the units are not successive multiples (Half-Crown) this will not work. 
+    /// For that case 'CoinsForUnevenFactors' a more general (slower) approach is necessary that uses '/' and '%'
+    /// to derive the set of numbers of coins given a value.  
+    ///
+    /// For efficiency the caller has to pass in an array[X] where X is 'value' to store results. i.e., 
+    /// if the function finds one combination has 213 coins then it needs to add it -> array[213] += 213
+    /// thus you efficiently build up the tally of coin #'s for each combination.  It would be better for
+    /// division of responsibility to pass in, say Action<Int>, to keep track, or to return IEnumerable<Int> 
+    /// but either of these adds significantly to latency.  
+    /// 
+    /// 'CoinsByRecursion' is a simpler recursive version of 'CoinsForUnevenFactors' (with an easier interface) which can be used
+    /// for validation but is too slow for general use. 
+    /// 
+    /// </summary>
+    public class CoinsForEvenFactors
     {
-        public static Int32 QuickCalculateCombinations(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6,(int value,int multiple) n7)
+                /// <summary>
+        /// Takes a representation of a combination of units - as per discussion in Class header
+        /// and efficiently calculates # of coins in each combination and adds them to the 
+        /// passed in array in the appropriate slot for # of coins
+        /// </summary>
+        /// <param name="arr">Input array of same size as original value</param>
+        /// <param name="valueForAssert">The input number in decimal form - used in Debug more for validation</param>
+        /// <param name="n1">Tuple representing number of these units and how many of them there are to each base unit.</param>
+        /// <param name="n2"></param>
+        /// <param name="n3"></param>
+        /// <param name="n4"></param>
+        /// <param name="n5"></param>
+        /// <param name="n6"></param>
+        /// <param name="n7"></param>
+        /// <returns>Number of combinations found</returns>
+        /// <exception cref="Exception">In debug more validates and throws exception if a combination is not a factor of 'valueForAssert' or array too small </exception>
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6,(int value,int multiple) n7)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -18,7 +61,7 @@ namespace CoinsLib.CombinationCalculator
             var transitionFactor5 = n5.multiple / n6.multiple;
             var transitionFactor6 = n6.multiple / n7.multiple;
 
-            int cnt = 0;
+            Int64 cnt = 0;
 
             for (var j = 0; j < n1.value; j++)
             {
@@ -58,6 +101,9 @@ namespace CoinsLib.CombinationCalculator
 
                                     var p_coins = n7.multiple - tf6;
 #if DEBUG
+                                    if (arr.Length < valueForAssert)
+                                        throw new Exception("array length has to be greater than or equal to valueForAssert");
+                                    
                                     if (j_coins * n1.multiple + k_coins * n2.multiple + l_coins * n3.multiple +
                                         m_coins * n4.multiple + n_coins * n5.multiple + o_coins * n6.multiple + p_coins * n7.multiple !=
                                         valueForAssert)
@@ -80,17 +126,19 @@ namespace CoinsLib.CombinationCalculator
             return cnt;
         }
 
-
-        public static IEnumerable<Int32> QuickCalculateCombinations(int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6)
+        /// <summary>
+        /// See comment above
+        /// </summary>           
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
             var transitionFactor3 = n3.multiple / n4.multiple;
             var transitionFactor4 = n4.multiple / n5.multiple;
             var transitionFactor5 = n5.multiple / n6.multiple;
-            
-            
 
+            Int64 cnt = 0;
+            
             for (var j = 0; j < n1.value; j++)
             {
                 int j_coins = j + 1;
@@ -124,6 +172,8 @@ namespace CoinsLib.CombinationCalculator
                                 var o_coins = n6.value - tf5;
 
 #if DEBUG
+                                if (arr.Length < valueForAssert)
+                                    throw new Exception("arr length needs to be >= valueForAssert");
                                 if (j_coins * n1.multiple + k_coins * n2.multiple + l_coins * n3.multiple +
                                     m_coins * n4.multiple + n_coins * n5.multiple + o_coins * n6.multiple != valueForAssert)
                                 {
@@ -131,20 +181,28 @@ namespace CoinsLib.CombinationCalculator
                                         $"found a combination that does not add up to our expected total - {valueForAssert}");
                                 }
 #endif
-                                yield return j_coins + k_coins + l_coins + m_coins + n_coins + o_coins;
+                                var g = k_coins + l_coins + m_coins + n_coins + o_coins;
+                                arr[g] += g;
+                                cnt++;
                             }
                         }
                     }
                 }
             }
+            return cnt;
         }
         
-        public static IEnumerable<Int32> QuickCalculateCombinations(int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5)
+        /// <summary>
+        /// See comment above
+        /// </summary>           
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
             var transitionFactor3 = n3.multiple / n4.multiple;
             var transitionFactor4 = n4.multiple / n5.multiple;
+
+            Int64 cnt = 0;
 
             for (var j = 0; j < n1.value; j++)
             {
@@ -173,6 +231,9 @@ namespace CoinsLib.CombinationCalculator
                             int n_coins = n5.value - tf4;
 
 #if DEBUG
+                            if (arr.Length < valueForAssert)
+                                throw new Exception("arr.Length has to be <= valueForAssert");
+                            
                             if (j_coins * n1.multiple + k_coins * n2.multiple + l_coins * n3.multiple +
                                 m_coins * n4.multiple + n_coins * n5.multiple  != valueForAssert)
                             {
@@ -180,18 +241,25 @@ namespace CoinsLib.CombinationCalculator
                                     $"found a combination that does not add up to our expected total - {valueForAssert}");
                             }
 #endif
-                            yield return j_coins + k_coins + l_coins + m_coins + n_coins;
+                            var g = j_coins + k_coins + l_coins + m_coins + n_coins;
+                            arr[g] += g;
                         }
                     }
                 }
             }
+            return cnt;
         }
 
-        public static IEnumerable<Int32> QuickCalculateCombinations(int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4)
+        /// <summary>
+        /// See comment above
+        /// </summary>           
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
             var transitionFactor3 = n3.multiple / n4.multiple;
+
+            Int64 cnt = 0;
 
             for (var j = 0; j < n1.value; j++)
             {
@@ -214,6 +282,9 @@ namespace CoinsLib.CombinationCalculator
                         int m_coins = n4.value - tf3;
 
 #if DEBUG
+                        if (arr.Length < valueForAssert)
+                            throw new Exception("arr.length needs to be >= valueForAssert ");
+                        
                         if (j_coins * n1.multiple + k_coins * n2.multiple + l_coins * n3.multiple +
                             m_coins * n4.multiple != valueForAssert)
                         {
@@ -222,17 +293,23 @@ namespace CoinsLib.CombinationCalculator
                         
 #endif
                         
-                        yield return j_coins + k_coins + l_coins + m_coins;
+                        var g = j_coins + k_coins + l_coins + m_coins;
+                        arr[g] += g;
                     }
                 }
             }
+            return cnt;
         }
 
-
-        public static IEnumerable<Int32> QuickCalculateCombinations(int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3)
+        /// <summary>
+        /// See comment above
+        /// </summary>           
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
+
+            Int64 cnt = 0;
 
             for (var j = 0; j < n1.value; j++)
             {
@@ -249,20 +326,27 @@ namespace CoinsLib.CombinationCalculator
                     int l_coins = n3.value - tf2;
 
 #if DEBUG
+                    if (arr.Length < valueForAssert)
+                        throw new Exception("arr.length needs to be >= valueForAssert");
                     if (j_coins * n1.multiple + k_coins * n2.multiple + l_coins * n3.multiple != valueForAssert)
                     {
                         throw new Exception($"found a combination that does not add up to our expected total - {valueForAssert}");
                     }
 #endif
-                    yield return j_coins + k_coins + l_coins;
+                    var g = j_coins + k_coins + l_coins;
+                    arr[g] += g;
                 }
             }
+            return cnt;
         }
-
-        public static IEnumerable<Int32> QuickCalculateCombinations(int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2)
+        /// <summary>
+        /// See comment above
+        /// </summary>           
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
 
+            Int64 cnt = 0;
             for (var j = 0; j < n1.value; j++)
             {
                 int j_coins = j + 1;
@@ -277,187 +361,27 @@ namespace CoinsLib.CombinationCalculator
                     throw new Exception($"found a combination that does not add up to our expected total - {valueForAssert}");
                 }
 #endif
-                yield return j_coins + k_coins;
+                var g = j_coins + k_coins;
+                arr[g] += g;
             }
+            return cnt;
         }
-
-        public static IEnumerable<Int32> QuickCalculateCombinations(int valueForAssert,(int noCoins, int multiple) n1)
+        /// <summary>
+        /// See comment above
+        /// </summary>           
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert,(int noCoins, int multiple) n1)
         {
+            Int64 cnt = 0;
 #if DEBUG
+            if (arr.Length < valueForAssert)
+                throw new Exception("arr.Length has to be >= valueForAssert");
             if (n1.noCoins * n1.multiple != valueForAssert)
                 throw new Exception($"Unexpected value found - noCoins * multiple should be {valueForAssert}");
 #endif
-            yield return n1.noCoins;
+            arr[n1.noCoins] += n1.noCoins;
+            return cnt++;
         }
 
-        public static IEnumerable<Int32> BruteForceCombinations(Coin c, int value, int totalCoins=0)
-        {
-            if (c.Next == null )
-            {
-                if (value % c.Units == 0  && value > 0)  
-                    yield return value / c.Units + totalCoins;
-            }
-            else
-            {
-                for (int i = 1; i <=value/c.Units;i++)
-                {
-                    totalCoins++;
-                    foreach (var x in BruteForceCombinations(c.Next, value - i*c.Units, totalCoins))
-                    {
-                        yield return x;
-                    }
-                }
-            }
-        }
-
-        
-        
-        public static void BruteForceCombinations(Action<Int32> act,Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5,Int32 unit6, Int32 unit7, int value)
-        {
-
-            var i_Coins  = 0;
-            for (int i = 1; i <= value / unit1; i++)
-            {
-                i_Coins++;
-                var j_val = value - i * unit1;
-                var j_Coins = i_Coins;
-                for (int j = 1; j <= j_val / unit2; j++)
-                {
-                    j_Coins++;
-                    
-                    var k_val = j_val - j * unit2;
-
-                    var k_Coins = j_Coins;
-                    for (int k = 1; k <= k_val / unit3; k++)
-                    {
-                        k_Coins++;
-
-                        var l_val = k_val - k * unit3;
-
-                        var l_Coins = k_Coins;
-
-                        for (int l = 1; l <= l_val / unit4 ; l++)
-                        {
-                            l_Coins++;
-
-                            var m_val = l_val - l * unit4;
-
-                            var m_Coins = l_Coins;
-
-                            for (int m = 1; m <= m_val / unit5; m++)
-                            {
-                                m_Coins++;
-
-                                var n_val = m_val - m * unit5;
-
-                                var n_Coins = m_Coins;
-
-                                for (int n = 1; n <= n_val / unit6; n++)
-                                {
-                                    var o_Coins = n_Coins;
-                                    o_Coins++;
-
-                                    var o_val = n_val - n * unit6;
-                                    if (o_val % unit7 == 0 && o_val > 0)
-                                        act(o_val / unit7 + o_Coins);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        public static void BruteForceCombinations(Action<Int32> act,Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5,Int32 unit6, int value)
-        {
-            var i_Coins  = 0;
-            for (int i = 1; i <= value / unit1; i++)
-            {
-                i_Coins++;
-                var j_val = value - i * unit1;
-                var j_Coins = i_Coins;
-                for (int j = 1; j <= j_val / unit2; j++)
-                {
-                    j_Coins++;
-                    
-                    var k_val = j_val - j * unit2;
-
-                    var k_Coins = j_Coins;
-                    for (int k = 1; k <= k_val / unit3; k++)
-                    {
-                        k_Coins++;
-
-                        var l_val = k_val - k * unit3;
-
-                        var l_Coins = k_Coins;
-
-                        for (int l = 1; l <= l_val / unit4 ; l++)
-                        {
-                            l_Coins++;
-
-                            var m_val = l_val - l * unit4;
-
-                            var m_Coins = l_Coins;
-
-                            for (int m = 1; m <= m_val / unit5; m++)
-                            {
-                                m_Coins++;
-
-                                var n_val = m_val - m * unit5;
-                                
-                                if (n_val % unit6 == 0 && n_val > 0)
-                                    act(n_val / unit6 +  m_Coins);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        
-        public static void BruteForceCombinations(Action<Int32> act,Int32 unit1,Int32 unit2,Int32 unit3, int value)
-        {
-
-            var i_Coins  = 0;
-            for (int i = 1; i <= value / unit1; i++)
-            {
-                i_Coins++;
-                var j_val = value - i * unit1;
-                var j_Coins = i_Coins;
-                for (int j = 1; j <= j_val / unit2; j++)
-                {
-                    j_Coins++;
-                    
-                    var k_val = j_val - j * unit2;
-                    if (k_val % unit3 == 0 && k_val > 0)
-                        act(k_val / unit3 + j_Coins);
-                }
-            }
-        }
-
-
-        public static IEnumerable<(int value, int multiple)> GenerateCoinsAndMultiples(Coin c, Int32 value,int startPoint = 0)
-        {
-            if (c.RequiresBruteForceCalculator())
-                throw new Exception("invalid option - requires BruteForceCalculator");
-
-            if (value % c.GenerateMyUnits().Last() != 0)
-                throw new Exception($"Generate coins and multiples requires factor of lowest value - {c.GenerateMyUnits().Last()}");
-            
-            if (startPoint == 0)
-                startPoint = c.GenerateMyUnits().Sum();
-
-            var differenceBetweenValAndStartPoint = value - startPoint;
-
-            int coins = (differenceBetweenValAndStartPoint / c.Units) + 1;
-
-            yield return (coins, c.Units);
-            
-            if (c.Next != null)
-                foreach (var y in GenerateCoinsAndMultiples(c.Next, value, startPoint))
-                    yield return y;
-
-        }
-
+    
     }
 }

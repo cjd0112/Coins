@@ -4,9 +4,12 @@ using System.Text;
 
 namespace CoinsLib.CombinationCalculator
 {
+    /// <summary>
+    /// inter
+    /// </summary>
     public interface IComboCalculator
     {
         IComboCalculator Initialize(Coin c);
-        void Increment(Action<Int32> newNumberOfCombinations);
+        Int64 Increment(ref Int64[] coinCountHolder);
     }
 }
