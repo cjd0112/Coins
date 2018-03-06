@@ -52,7 +52,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <param name="n7"></param>
         /// <returns>Number of combinations found</returns>
         /// <exception cref="Exception">In debug more validates and throws exception if a combination is not a factor of 'valueForAssert' or array too small </exception>
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6,(int value,int multiple) n7)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6,(int value,int multiple) n7)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -99,7 +99,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
 
                                     var tf6 = (tf5 * transitionFactor6) + (transitionFactor6 * o);
 
-                                    var p_coins = n7.multiple - tf6;
+                                    var p_coins = n7.value - tf6;
 #if DEBUG
                                     if (arr.Length < valueForAssert)
                                         throw new Exception("array length has to be greater than or equal to valueForAssert");
@@ -129,7 +129,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -181,7 +181,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
                                         $"found a combination that does not add up to our expected total - {valueForAssert}");
                                 }
 #endif
-                                var g = k_coins + l_coins + m_coins + n_coins + o_coins;
+                                var g = j_coins + k_coins + l_coins + m_coins + n_coins + o_coins;
                                 arr[g] += g;
                                 cnt++;
                             }
@@ -195,7 +195,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -253,7 +253,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -304,7 +304,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -342,7 +342,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
 
@@ -369,7 +369,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr, int valueForAssert,(int noCoins, int multiple) n1)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert,(int noCoins, int multiple) n1)
         {
             Int64 cnt = 0;
 #if DEBUG

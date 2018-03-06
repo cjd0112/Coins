@@ -45,7 +45,7 @@ namespace CoinsLib.CombinationCalculator
         /// <param name="newNumberOfCoins"></param>
         /// <returns>Number of combinations found</returns>
         /// <exception cref="Exception">Exception if internal number of Tickers happens to be wrong ... shouldn;t happen</exception>
-        public override Int64 Increment(ref Int64[] newNumberOfCoins)
+        public override Int64 Increment(Int64[] newNumberOfCoins)
         {
             base.Increment();
             
@@ -62,19 +62,19 @@ namespace CoinsLib.CombinationCalculator
             if (vals.Last().Increment())
             {
                 if (vals.Count == 7)
-                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(ref newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM(), vals[6].VM());
+                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM(), vals[6].VM());
                 else if (vals.Count == 6)
-                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(ref newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM());
+                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM());
                 else if (vals.Count == 5)
-                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(ref newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM());
+                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM());
                 else if (vals.Count == 4)
-                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(ref newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM());
+                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM());
                 else if (vals.Count == 3)
-                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(ref newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM());
+                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM());
                 else if (vals.Count == 2)
-                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(ref newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM());
+                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(newNumberOfCoins,externalValue,vals[0].VM(), vals[1].VM());
                 else if (vals.Count == 1)
-                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(ref newNumberOfCoins,externalValue,vals[0].VM());
+                    cnt = CoinsForEvenFactors.CalculateTotalCoinsForEachComboAndReturnCount(newNumberOfCoins,externalValue,vals[0].VM());
                 else
                     throw new Exception($"Unexpected number of values initialized - {vals.Count} > 7");
             }

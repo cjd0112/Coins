@@ -3,7 +3,6 @@ using System.Linq;
 using CoinsLib.Coins;
 using CoinsLib.CombinationCalculator;
 using CoinsLib.Util;
-using CoinFactory = CoinsLib.CombinationCalculator.CoinFactory;
 
 namespace Coins
 {
@@ -14,12 +13,12 @@ namespace Coins
         {
             int num = 10;
 
-            var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinsLib.Coins.CoinFactory.GenerateCoinStatic());
+            var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
             Console.WriteLine($"Correct res = {oldRes}");
 
 
-            var coins = CoinFactory.GenerateCoinStatic();
+            var coins = MagicPurse.GenerateCoinStatic();
 
             var reducer = new ComboReducer(num);
 
@@ -33,15 +32,9 @@ namespace Coins
                         return new ComboCalculatorEvenFactors(x);
                 }).ToArray();
 
-            //generate results for each number up to our input number minus one
-            // we don't use the (0, num) limiting set because there are no combinations 
-            // which match 0 and num
             foreach (var i in Enumerable.Range(0, num))
             {
-                calculationGrid.ForEach(x => x.Increment((q) =>
-                {
-                    reducer.AggregateNoCoinsForValue(i,q);
-                }));
+                calculationGrid.ForEach(x => x.Increment(reducer.GetStorageArrayForValue(i)));
             }
 
             // now the total number of ways to divide the number is the sum of each
@@ -51,7 +44,7 @@ namespace Coins
             // b->2 = ((1 1),(1))  
             // result = 1
             Console.Write($"Our res =");
-            Console.WriteLine(Enumerable.Range(1,num-1).Zip(Enumerable.Range(1,num-1).Reverse(),(x,y)=>(x,y)).Sum(reducer.SharedCombinationOfTwoValues));
+            Console.WriteLine(Enumerable.Range(1,num-1).Zip(Enumerable.Range(1,num-1).Reverse(),(x,y)=>(x,y)).Sum(x=>reducer.SharedCombinationOfTwoValues(x)));
 
             Console.ReadLine();
 

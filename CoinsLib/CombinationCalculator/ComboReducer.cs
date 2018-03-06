@@ -66,7 +66,7 @@ namespace CoinsLib.CombinationCalculator
         /// <param name="i">tuple indicating the two values to get</param>
         /// <returns>total number of cases where coins can be shared evenly</returns>
         /// <exception cref="ArgumentException"></exception>
-        public int SharedCombinationOfTwoValues((Int32 val1, Int32 val2) i)
+        public Int64 SharedCombinationOfTwoValues((Int32 val1, Int32 val2) i)
         {
             if (i.val1 >= this.value || i.val1 < 0)
                 throw new ArgumentException($"Invalid argument - {i.val1} - expected max - {this.value}");

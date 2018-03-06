@@ -37,7 +37,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <param name="unit7"></param>
         /// <returns>number of combinations found</returns>
         /// <exception cref="Exception">throws in debug mode if array length is too small </exception>        
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5,Int32 unit6, Int32 unit7)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5,Int32 unit6, Int32 unit7)
         {
 #if DEBUG
             if (arr.Length < value)
@@ -83,13 +83,12 @@ namespace CoinsLib.CombinationCalculator.Underlying
 
                                 for (int n = 1; n <= n_val / unit6; n++)
                                 {
-                                    var o_Coins = n_Coins;
-                                    o_Coins++;
+                                    n_Coins++;
 
                                     var o_val = n_val - n * unit6;
                                     if (o_val % unit7 == 0 && o_val > 0)
                                     {
-                                        var g = o_val / unit7 + o_Coins;
+                                        var g = o_val / unit7 + n_Coins;
                                         arr[g] += g;
                                         cnt++;
                                     }
@@ -102,7 +101,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
             return cnt;
         }
         
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5,Int32 unit6)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5,Int32 unit6)
         {
 #if DEBUG
             if (arr.Length < value)
@@ -161,7 +160,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comments above
         /// </summary>
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4,Int32 unit5)
         {
 #if DEBUG
             if (arr.Length < value)
@@ -212,7 +211,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comments above
         /// </summary>
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3, Int32 unit4)
         {
 #if DEBUG
             if (arr.Length < value)
@@ -252,7 +251,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comments above
         /// </summary>
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int value, Int32 unit1,Int32 unit2,Int32 unit3)
         {
 #if DEBUG
             if (arr.Length < value)
@@ -286,7 +285,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comments above
         /// </summary>
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int value, Int32 unit1,Int32 unit2)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int value, Int32 unit1,Int32 unit2)
         {
 #if DEBUG
             if (arr.Length < value)
@@ -312,7 +311,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comments above
         /// </summary>
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(ref Int64[] arr,int value, Int32 unit1)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int value, Int32 unit1)
         {
 #if DEBUG
             if (arr.Length < value)

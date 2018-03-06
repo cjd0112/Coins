@@ -5,88 +5,47 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
 using CoinsLib.CombinationCalculator;
+using CoinsLib.CombinationCalculator.Underlying;
 using CoinsLib.Util;
 
 namespace Test3
 {
     class Program
     {
-
-        static void CheckEquals(IEnumerable<Int32> a, IEnumerable<Int32> b)
-        {
-            if (a.Count() != b.Count())
-                Console.WriteLine("failed count");
-            a.ForEach(x =>
-            {
-                if (b.Contains(x) == false)
-                    Console.WriteLine("faile");
-            });
-            
-            b.ForEach(x =>
-            {
-                if (a.Contains(x) == false)
-                    Console.WriteLine("fail");
-            });
-        }
-        
+      
+       
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
+            bool printResults = false;
             
-
-            var arr = new[] {32,16, 8, 4, 2, 1};
-
-            var targetValue = arr.Sum() +1000;
+            var arr = new[] {64,32,16,8,4,  2, 1};
             
-            Console.WriteLine("target value is " + targetValue);
-
-
-            var foo = CoinFactory.GenerateTestCoin(arr.ToList());
-
-            var s = new Stopwatch();
-
-            s.Start();
-
-            var cnnt = 0;
+            Printer.Print(arr.Select(x=>Convert.ToInt64(x)),"Initial array");
             
-            Combinations.BruteForceCombinations(h =>
-            {
-                cnnt++;
-            }, 32, 16, 8, 4,2,1,targetValue);
+            var res = CompareThree.GetResults(arr,234);
 
-            Console.WriteLine(cnnt);
-            
-            //Combinations.BruteForceCombinations((x) => cnnt++, foo, targetValue);
-                
-            s.Stop();
-            
-            Console.WriteLine(s.ElapsedMilliseconds);
+            Console.WriteLine("checking equals - Recursive vs. Uneven");
 
-            var g = Combinations.GenerateCoinsAndMultiples(foo, targetValue).ToArray();
-            
-            s = new Stopwatch();
+            Validator.CheckEquals(res.recursive,res.uneven);
 
-            s.Start();
+            Console.WriteLine("checking equals - Uneven versus Even");
 
-            int cnt = 0;
-            Combinations.QuickCalculateCombinations2((i) =>
-            {
-                cnt++;
-            },targetValue, g[0], g[1], g[2], g[3], g[4], g[5]);
-         
-            s.Stop();
-            
-            Console.WriteLine(s.ElapsedMilliseconds);
+            Validator.CheckEquals(res.uneven,res.even);
 
+            Console.WriteLine("checking equals - Recursive versus Even");
 
-            //CheckEquals(res1, res2);
-            
-            Console.WriteLine("total nodes:" + cnt);
+            Validator.CheckEquals(res.recursive,res.even);
            
-            Console.WriteLine("finisheed");
+            Console.WriteLine("finished");
 
-            Console.ReadLine();
+            if (printResults)
+            {
+                Printer.Print(res.recursive,"Recursive");
+                Printer.Print(res.uneven,"Uneven");
+                Printer.Print(res.even,"Even");
+
+
+            }
 
         }
     }

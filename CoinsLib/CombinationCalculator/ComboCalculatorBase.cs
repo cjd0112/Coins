@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CoinsLib.CombinationCalculator.Underlying;
 
 namespace CoinsLib.CombinationCalculator
 {
@@ -50,7 +51,7 @@ namespace CoinsLib.CombinationCalculator
         }
 
 
-        public abstract Int64 Increment(ref Int64[] coinCountHolder);
+        public abstract Int64 Increment(Int64[] coinCountHolder);
 
         protected Coin coin;
 

@@ -17,7 +17,7 @@ namespace CoinsLib.CombinationCalculator
         {
 
         }
-        public override Int64 Increment(ref Int64[] newNumberOfCoins)
+        public override Int64 Increment(Int64[] newNumberOfCoins)
         {
             base.Increment();
             Int64 cnt = 0;

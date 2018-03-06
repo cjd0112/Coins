@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CoinsLib.Coins;
 
 namespace CoinsLib.CombinationCalculator.Underlying
 {
@@ -27,11 +28,19 @@ namespace CoinsLib.CombinationCalculator.Underlying
                 for (int i = 1; i <=value/c.Units;i++)
                 {
                     totalCoins++;
-                    foreach (var x in CoinsByRecursion(c.Next, value - i*c.Units, totalCoins))
+                    foreach (var x in TotalCoinsForEachCombinationForValue(c.Next, value - i*c.Units, totalCoins))
                     {
                         yield return x;
                     }
                 }
+            }
+        }
+
+        public static void TotalCoinsForEachCombinationForValue(Int64[] arr, Coin c, int value)
+        {
+            foreach (var j in TotalCoinsForEachCombinationForValue(c,value))
+            {
+                arr[j] += j;
             }
         }
 
