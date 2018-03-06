@@ -20,7 +20,7 @@ namespace CoinsLib.CombinationCalculator
         public override void Increment(Action<int> newNumberOfCombinations)
         {
             base.Increment();
-            QuickCoinsCalculator.BruteForceCombinations(coin, externalValue).ForEach(newNumberOfCombinations);
+            Combinations.BruteForceCombinations(coin, externalValue).ForEach(newNumberOfCombinations);
         }
 
 

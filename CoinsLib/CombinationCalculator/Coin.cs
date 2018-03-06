@@ -101,8 +101,12 @@ namespace CoinsLib.CombinationCalculator
         public bool RequiresBruteForceCalculator(int parentUnits = 0)
         {
             if (parentUnits == 0 || parentUnits % Units == 0)
-                return Next.RequiresBruteForceCalculator(Units);
-            return false;
+            {
+                if (Next != null)
+                    return Next.RequiresBruteForceCalculator(Units);
+                return false;
+            }
+            return true;
         }
 
         public IEnumerable<Int32> GenerateMyUnits()

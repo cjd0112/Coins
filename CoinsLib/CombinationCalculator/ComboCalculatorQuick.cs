@@ -43,19 +43,19 @@ namespace CoinsLib.CombinationCalculator
             {
                 IEnumerable<Int32> res = null;
                 if (vals.Count == 7)
-                    res = QuickCoinsCalculator.Calculate(vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM(), vals[6].VM());
+                    res = Combinations.QuickCalculateCombinations(externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM(), vals[6].VM());
                 else if (vals.Count == 6)
-                    res = QuickCoinsCalculator.Calculate(vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM());
+                    res = Combinations.QuickCalculateCombinations(externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM(),vals[5].VM());
                 else if (vals.Count == 5)
-                    res = QuickCoinsCalculator.Calculate(vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM());
+                    res = Combinations.QuickCalculateCombinations(externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM(), vals[4].VM());
                 else if (vals.Count == 4)
-                    res = QuickCoinsCalculator.Calculate(vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM());
+                    res = Combinations.QuickCalculateCombinations(externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM(), vals[3].VM());
                 else if (vals.Count == 3)
-                    res = QuickCoinsCalculator.Calculate(vals[0].VM(), vals[1].VM(), vals[2].VM());
+                    res = Combinations.QuickCalculateCombinations(externalValue,vals[0].VM(), vals[1].VM(), vals[2].VM());
                 else if (vals.Count == 2)
-                    res = QuickCoinsCalculator.Calculate(vals[0].VM(), vals[1].VM());
+                    res = Combinations.QuickCalculateCombinations(externalValue,vals[0].VM(), vals[1].VM());
                 else if (vals.Count == 1)
-                    res = QuickCoinsCalculator.Calculate(vals[0].VM());
+                    res = Combinations.QuickCalculateCombinations(externalValue,vals[0].VM());
 
                 res.ForEach(newNumberOfCoins);
             }
