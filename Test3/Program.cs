@@ -86,6 +86,7 @@ namespace Test3
            
             Console.WriteLine("finisheed");
 
+            Console.ReadLine();
 
         }
     }
