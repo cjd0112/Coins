@@ -36,7 +36,7 @@ namespace CoinsLib.Coins
     {
         public static Coin GenerateCoinStatic()
         {
-            return new Coin(54,"HC",new Coin(48,"FL",new Coin(24,"SH",new Coin(12, "6d", new Coin(6, "3d", new Coin(2, "1d", new Coin(1, ".5d", null)))))));
+            return new Coin(60,"HC",new Coin(48,"FL",new Coin(24,"SH",new Coin(12, "6d", new Coin(6, "3d", new Coin(2, "1d", new Coin(1, ".5d", null)))))));
         }
     }
 }

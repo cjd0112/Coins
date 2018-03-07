@@ -10,14 +10,26 @@ namespace CoinsLib.CombinationCalculator.Underlying
      * and this unit is '2' then it will tick every 2nd increment from '7' and
      * GetValue() will return how many times it has hit
      */
+    /// <summary>
+    /// Simple class to keep track of number of times this 'Unit' (within a combination) has been 'hit'. 
+    /// Starts with startNumber which represents the minimum number from a combination 
+    /// i.e.m for '6,2,1' would be 9
+    /// after the startNumber is triggered
+    /// we return true from Increment function every time our unit triggers
+    /// and the number returned from GetValue() increases by '1'. 
+    /// The result is that when NCT is combined 
+    /// we get the MAX number of each unit after increment.
+    /// This is necessary input to the 'EvenFactor' Optimized way of calculating combos. 
+    /// </summary>
     public class NumberCombinationsTicker
     {
         public NumberCombinationsTicker(int units,int startNumber)
         {
             multiplesOf = units;
-            this.startNumber = startNumber;
+            this.startNumber = originalStartNumber = startNumber;
         }
 
+        private int originalStartNumber; // useful for debugging only;
         int multiplesOf;
         int startNumber;
         int value;

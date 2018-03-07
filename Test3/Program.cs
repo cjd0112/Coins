@@ -16,6 +16,20 @@ namespace Test3
        
         static void Main(string[] args)
         {
+
+            var res2 = new Int64[30];
+
+            var coins = MagicPurse.GenerateTestCoin(new int[] {4, 2, 1}.ToList());
+            
+            var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins,30 ).ToArray();
+
+
+
+            Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, 30, g[0], g[1], g[2]);
+
+            return;
+            
+            
             bool printResults = false;
             
             var arr = new[] {64,32,16,8,4,  2, 1};
@@ -23,6 +37,9 @@ namespace Test3
             Printer.Print(arr.Select(x=>Convert.ToInt64(x)),"Initial array");
             
             var res = CompareThree.GetResults(arr,234);
+            
+            
+            
 
             Console.WriteLine("checking equals - Recursive vs. Uneven");
 

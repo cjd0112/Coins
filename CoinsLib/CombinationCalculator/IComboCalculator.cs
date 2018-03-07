@@ -9,7 +9,6 @@ namespace CoinsLib.CombinationCalculator
     /// </summary>
     public interface IComboCalculator
     {
-        IComboCalculator Initialize(Coin c);
-        Int64 Increment(Int64[] coinCountHolder);
+        Int64 Calculate(int value,int maximumCoins, Int64[] coinCountHolder);
     }
 }

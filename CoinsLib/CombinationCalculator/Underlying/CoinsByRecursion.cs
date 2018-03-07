@@ -40,7 +40,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         {
             foreach (var j in TotalCoinsForEachCombinationForValue(c,value))
             {
-                arr[j] += j;
+                arr[j]++;
             }
         }
 

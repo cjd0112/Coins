@@ -152,7 +152,7 @@ namespace CoinsLib.CombinationCalculator
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Int32> GenerateMyUnits()
-        {
+        {            
             if (Next == null)
                 yield return Units;
 

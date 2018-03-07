@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace CoinsLib.CombinationCalculator.Underlying
 {
@@ -43,6 +44,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// </summary>
         /// <param name="arr">Input array of same size as original value</param>
         /// <param name="valueForAssert">The input number in decimal form - used in Debug more for validation</param>
+        /// <param name="maximumCoins">Stop calculating if you exceed this # coins - the 'other side' of the calculation will not match </param>
         /// <param name="n1">Tuple representing number of these units and how many of them there are to each base unit.</param>
         /// <param name="n2"></param>
         /// <param name="n3"></param>
@@ -52,7 +54,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <param name="n7"></param>
         /// <returns>Number of combinations found</returns>
         /// <exception cref="Exception">In debug more validates and throws exception if a combination is not a factor of 'valueForAssert' or array too small </exception>
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6,(int value,int multiple) n7)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int maximumCoins, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6,(int value,int multiple) n7)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -67,23 +69,36 @@ namespace CoinsLib.CombinationCalculator.Underlying
             {
                 int j_coins = j + 1;
 
+                if (j_coins > maximumCoins)
+                    continue;
+
                 int tf1 = transitionFactor1 * j;
                 
                 for (var k = 0; k < n2.value - tf1; k++)
                 {
                     int k_coins = k + 1;
 
+                    if (j_coins + k_coins > maximumCoins)
+                        continue;
+
                     var tf2 = (tf1*transitionFactor2) + (transitionFactor2 * k);
 
                     for (var l = 0; l < n3.value - tf2; l++)
                     {
                         int l_coins = l + 1;
+                        
+                        if (j_coins + k_coins + l_coins > maximumCoins)
+                            continue;
 
                         var tf3 = (tf2* transitionFactor3) + (transitionFactor3 * l);
 
                         for (var m = 0; m < n4.value - tf3; m++)
                         {
                             int m_coins = m + 1;
+                            
+                            if (j_coins + k_coins + l_coins + m_coins > maximumCoins)
+                                continue;
+
 
                             var tf4 = (tf3 * transitionFactor4) + (transitionFactor4 * m);
 
@@ -91,15 +106,24 @@ namespace CoinsLib.CombinationCalculator.Underlying
                             {
                                 int n_coins = n + 1;
 
+                                if (j_coins + k_coins + l_coins + m_coins + n_coins > maximumCoins)
+                                    continue;
+
                                 var tf5 = (tf4 * transitionFactor5) + (transitionFactor5 * n);
 
                                 for (var o = 0; o < n6.value - tf5; o++)
                                 {
                                     var o_coins = o + 1;
+                                    
+                                    if (j_coins + k_coins + l_coins + m_coins + n_coins + o_coins > maximumCoins)
+                                        continue;
 
                                     var tf6 = (tf5 * transitionFactor6) + (transitionFactor6 * o);
 
                                     var p_coins = n7.value - tf6;
+
+                                    if (j_coins + k_coins + l_coins + m_coins + n_coins + o_coins + p_coins  > maximumCoins)
+                                        continue;
 #if DEBUG
                                     if (arr.Length < valueForAssert)
                                         throw new Exception("array length has to be greater than or equal to valueForAssert");
@@ -115,7 +139,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
                                     cnt++;
                                     
                                     var ret =  j_coins + k_coins + l_coins + m_coins + n_coins + o_coins + p_coins;
-                                    arr[ret] += ret;
+                                    arr[ret]++;
                                 }
                             }
                         }
@@ -129,7 +153,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int maximumCoins, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5,(int value,int multiple) n6)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -143,11 +167,17 @@ namespace CoinsLib.CombinationCalculator.Underlying
             {
                 int j_coins = j + 1;
 
+                if (j_coins > maximumCoins)
+                    continue;
+
                 var tf1 = transitionFactor1 * j;
                 
                 for (var k = 0; k < n2.value - tf1; k++)
                 {
                     int k_coins = k + 1;
+                    
+                    if (j_coins + k_coins > maximumCoins)
+                        continue;
 
                     var tf2 = (tf1*transitionFactor2) + (transitionFactor2 * k);
 
@@ -155,25 +185,37 @@ namespace CoinsLib.CombinationCalculator.Underlying
                     {
                         int l_coins = l + 1;
 
+                        if (j_coins + k_coins + l_coins > maximumCoins)
+                            continue;
+
                         var tf3 = (tf2* transitionFactor3) + (transitionFactor3 * l);
 
                         for (var m = 0; m < n4.value - tf3; m++)
                         {
                             int m_coins = m + 1;
+                            
+                            if (j_coins + k_coins + l_coins + m_coins > maximumCoins)
+                                continue;
+
 
                             var tf4 = (tf3 * transitionFactor4) + (transitionFactor4 * m);
 
                             for (var n = 0; n < n5.value - tf4; n++)
                             {
                                 int n_coins = n + 1;
+                                
+                                if (j_coins + k_coins + l_coins + m_coins + n_coins > maximumCoins)
+                                    continue;
 
                                 var tf5 = (tf4 * transitionFactor5) + (transitionFactor5 * n);
 
                                 var o_coins = n6.value - tf5;
-
+                                
+                                if (j_coins + k_coins + l_coins + m_coins + o_coins > maximumCoins)
+                                    continue;
 #if DEBUG
                                 if (arr.Length < valueForAssert)
-                                    throw new Exception("arr length needs to be >= valueForAssert");
+                                    throw new Exception("arr length needs to be > valueForAssert");
                                 if (j_coins * n1.multiple + k_coins * n2.multiple + l_coins * n3.multiple +
                                     m_coins * n4.multiple + n_coins * n5.multiple + o_coins * n6.multiple != valueForAssert)
                                 {
@@ -182,7 +224,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
                                 }
 #endif
                                 var g = j_coins + k_coins + l_coins + m_coins + n_coins + o_coins;
-                                arr[g] += g;
+                                arr[g]++;
                                 cnt++;
                             }
                         }
@@ -195,7 +237,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int maximumCoins, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4,(int value,int multiple) n5)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -208,27 +250,43 @@ namespace CoinsLib.CombinationCalculator.Underlying
             {
                 int j_coins = j + 1;
 
+                if (j_coins > maximumCoins)
+                    continue;
+
                 var tf1 = transitionFactor1 * j;
                 
                 for (var k = 0; k < n2.value - tf1; k++)
                 {
                     int k_coins = k + 1;
+                    
+                    if (j_coins + k_coins  > maximumCoins)
+                        continue;
+
 
                     var tf2 = (tf1*transitionFactor2) + (transitionFactor2 * k);
 
                     for (var l = 0; l < n3.value - tf2; l++)
                     {
                         int l_coins = l + 1;
+                        
+                        if (j_coins + k_coins + l_coins > maximumCoins)
+                            continue;
 
                         var tf3 = (tf2* transitionFactor3) + (transitionFactor3 * l);
 
                         for (var m = 0; m < n4.value - tf3; m++)
                         {
                             int m_coins = m + 1;
+                            
+                            if (j_coins + k_coins + l_coins + m_coins > maximumCoins)
+                                continue;
 
                             var tf4 = (tf3 * transitionFactor4) + (transitionFactor4 * m);
 
                             int n_coins = n5.value - tf4;
+                            
+                            if (j_coins + k_coins + l_coins + m_coins + n_coins > maximumCoins)
+                                continue;
 
 #if DEBUG
                             if (arr.Length < valueForAssert)
@@ -242,7 +300,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
                             }
 #endif
                             var g = j_coins + k_coins + l_coins + m_coins + n_coins;
-                            arr[g] += g;
+                            arr[g]++;
                         }
                     }
                 }
@@ -253,7 +311,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int maximumCoins, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3, (int value, int multiple) n4)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -265,22 +323,35 @@ namespace CoinsLib.CombinationCalculator.Underlying
             {
                 int j_coins = j + 1;
 
+                if (j_coins > maximumCoins)
+                    continue;
+
                 var tf1 = transitionFactor1 * j;
                 
                 for (var k = 0; k < n2.value - tf1; k++)
                 {
                     int k_coins = k + 1;
 
+                    if (j_coins +k_coins > maximumCoins)
+                        continue;
+
+                    
                     var tf2 = (tf1*transitionFactor2) + (transitionFactor2 * k);
 
                     for (var l = 0; l < n3.value - tf2; l++)
                     {
                         int l_coins = l + 1;
 
+                        if (j_coins +k_coins + l_coins > maximumCoins)
+                            continue;
+
+
                         var tf3 = (tf2* transitionFactor3) + (transitionFactor3 * l);
 
                         int m_coins = n4.value - tf3;
-
+                        
+                        if (j_coins +k_coins + l_coins + m_coins > maximumCoins)
+                            continue;
 #if DEBUG
                         if (arr.Length < valueForAssert)
                             throw new Exception("arr.length needs to be >= valueForAssert ");
@@ -294,7 +365,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
 #endif
                         
                         var g = j_coins + k_coins + l_coins + m_coins;
-                        arr[g] += g;
+                        arr[g]++;
                     }
                 }
             }
@@ -304,7 +375,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int maximumCoins, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2, (int value, int multiple) n3)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
@@ -315,15 +386,24 @@ namespace CoinsLib.CombinationCalculator.Underlying
             {
                 int j_coins = j + 1;
 
+                if (j_coins > maximumCoins)
+                    continue;
+
                 var tf1 = transitionFactor1 * j;
                 
                 for (var k = 0; k < n2.value - tf1; k++)
                 {
                     int k_coins = k + 1;
 
+                    if (j_coins + k_coins > maximumCoins)
+                        continue;
+
                     var tf2 = (tf1*transitionFactor2) + (transitionFactor2 * k);
 
                     int l_coins = n3.value - tf2;
+                    
+                    if (j_coins + k_coins + l_coins  > maximumCoins)
+                        continue;
 
 #if DEBUG
                     if (arr.Length < valueForAssert)
@@ -334,7 +414,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
                     }
 #endif
                     var g = j_coins + k_coins + l_coins;
-                    arr[g] += g;
+                    arr[g]++;
                 }
             }
             return cnt;
@@ -342,7 +422,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int maximumCoins, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
 
@@ -351,9 +431,16 @@ namespace CoinsLib.CombinationCalculator.Underlying
             {
                 int j_coins = j + 1;
 
+                if (j_coins > maximumCoins)
+                    continue;
+
                 var tf1 = transitionFactor1 * j;
                 
                 int k_coins = n2.value - tf1;
+                
+                if (j_coins + k_coins  > maximumCoins)
+                    continue;
+
 
 #if DEBUG
                 if (j_coins * n1.multiple + k_coins * n2.multiple != valueForAssert)
@@ -362,14 +449,14 @@ namespace CoinsLib.CombinationCalculator.Underlying
                 }
 #endif
                 var g = j_coins + k_coins;
-                arr[g] += g;
+                arr[g]++;
             }
             return cnt;
         }
         /// <summary>
         /// See comment above
         /// </summary>           
-        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int valueForAssert,(int noCoins, int multiple) n1)
+        public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr, int maximumCoins, int valueForAssert,(int noCoins, int multiple) n1)
         {
             Int64 cnt = 0;
 #if DEBUG
@@ -378,10 +465,13 @@ namespace CoinsLib.CombinationCalculator.Underlying
             if (n1.noCoins * n1.multiple != valueForAssert)
                 throw new Exception($"Unexpected value found - noCoins * multiple should be {valueForAssert}");
 #endif
-            arr[n1.noCoins] += n1.noCoins;
-            return cnt++;
-        }
-
-    
+            if (n1.noCoins <= maximumCoins)
+            {
+                arr[n1.noCoins]++;
+                cnt++;
+                
+            }
+            return cnt;
+        }    
     }
 }

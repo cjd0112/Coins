@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using CoinsLib.Util;
 
@@ -74,8 +75,9 @@ namespace CoinsLib.CombinationCalculator
             if (i.val2 >= this.value || i.val2 < 0)
                 throw new ArgumentException($"Invalid argument - {i.val2} - expected max - {this.value}");
 
-            var g = reducerGrid[i.val1].Zip(reducerGrid[i.val2], (x, y) => (x, y)).Sum(x => Math.Min(x.Item1, x.Item2));
-
+            var g = reducerGrid[i.val1].Zip(reducerGrid[i.val2], (x, y) => (x, y)).Sum(x =>x.Item1 * x.Item2);
+            
+ 
             return g;
         }
     }

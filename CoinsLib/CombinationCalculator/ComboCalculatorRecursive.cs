@@ -17,13 +17,12 @@ namespace CoinsLib.CombinationCalculator
         {
 
         }
-        public override Int64 Increment(Int64[] newNumberOfCoins)
+        public override Int64 Calculate(int source, int maximumCoins, Int64[] newNumberOfCoins)
         {
-            base.Increment();
             Int64 cnt = 0;
-            foreach (var c in CoinsByRecursion.TotalCoinsForEachCombinationForValue(coin, externalValue))
+            foreach (var c in CoinsByRecursion.TotalCoinsForEachCombinationForValue(coin, source))
             {
-                newNumberOfCoins[c] += c;
+                newNumberOfCoins[c]++;
                 cnt++;
             }
 

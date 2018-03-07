@@ -65,13 +65,15 @@ namespace CoinsLib.Coins
 
             foreach (var c in ValuePartitioner.PossibleWaysToDivideValueInTwo(value))
             {
+                int this_cnt = 0;
                 var lhs_total_coins = comboMap[c.lhs];
                 var rhs_total_coins = comboMap[c.rhs];
                 foreach (var n in lhs_total_coins)
                 {
-                    cnt += rhs_total_coins.Count(b => b == n);
+                    this_cnt += rhs_total_coins.Count(b => b == n);
                 }
 
+                cnt += this_cnt;
             }
 
             Console.WriteLine(sw.ElapsedMilliseconds / 1000);
