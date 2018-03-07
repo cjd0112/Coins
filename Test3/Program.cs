@@ -17,15 +17,21 @@ namespace Test3
         static void Main(string[] args)
         {
 
-            var res2 = new Int64[30];
+            int val =32;
+            var res2 = new Int64[val];
+            var arr2 = new int[] {8, 4, 2, 1}.ToList();
 
-            var coins = MagicPurse.GenerateTestCoin(new int[] {4, 2, 1}.ToList());
-            
-            var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins,30 ).ToArray();
-
-
-
-            Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, 30, g[0], g[1], g[2]);
+            var coins = MagicPurse.GenerateTestCoin(arr2);
+            if (arr2.Count == 3)
+            {
+                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
+                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2]);
+            }
+            else if (arr2.Count == 4)
+            {
+                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
+                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2],g[3]);
+            }
 
             return;
             
