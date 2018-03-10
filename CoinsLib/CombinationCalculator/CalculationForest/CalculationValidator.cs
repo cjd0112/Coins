@@ -25,7 +25,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             if (key == "4_2_1")
             {
                 Debug.Assert(differenceInParentComboNumber == 2 );
-                Debug.Assert(noCoinsToSubtractForEachUnit == );
+                Debug.Assert(noCoinsToSubtractForEachUnit == 3);
             }
 
         }

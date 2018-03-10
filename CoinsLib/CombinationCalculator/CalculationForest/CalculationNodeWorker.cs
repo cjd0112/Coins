@@ -20,6 +20,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 
         private int differenceInParentComboNumberForEachCoin = -1;
         private int noCoinsToSubtractForEachUnit = -1;
+        private int decrementInTotalCoinsForEachCoin = -1;
        
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         /// 
         /// A) the parent array of total coins produced for each combo
         /// B) the number of coins to subtract for every combination 
-        /// C) the new number of combinations every time we add one of our coins
+        /// C) the number of combinations to subtract every time we add one of our coins
         /// 
         /// B) and C) are the same for every input value. 
         /// 
@@ -62,7 +63,80 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         /// We calculate the 'C' the first time we are triggered based on the 
         /// number of combos from our parent - easy. 
         /// 
-        ///    
+        /// Our parent provides us with #of combinations, the max-number of coins and the 'step' between each coin
+        /// 
+        /// We will be transforming that into an array where each row provides our corresponding number of combinations.
+        /// 
+        /// Because each new coin -> 1 to (Value/Units) -> reduces the combination set and reduces the maximum number
+        /// we get a triangular output, where each row is number of coins 
+        /// 
+        /// E.g., if provided with following array indicating (45-26)=19 combinations and top one has 45 coins. 
+        ///       
+        /// 45,
+        /// 44
+        /// 43,
+        /// 42,
+        /// 41
+        /// ...
+        /// 26
+        /// 
+        /// we can convert this to following downward sloping triangle										
+        /// 45										
+        /// 44										
+        /// 43	43									
+        /// 42	42									
+        /// 41	41									
+        /// 40	40	40								
+        /// 39	39	39								
+        /// 38	38	38								
+        /// 37	37	37	37							
+        /// 36	36	36	36							
+        /// 35	35	35	35							
+        /// 34	34	34	34	34						
+        /// 33	33	33	33	33						
+        /// 32	32	32	32	32						
+        /// 31	31	31	31	31	31					
+        /// 30	30	30	30	30	30					
+        /// 29	29	29	29	29	29					
+        /// 28	28	28	28	28	28	28				
+        /// 27	27	27	27	27	27	27				
+        /// 26	26	26	26	26	26	26				
+        /// 25	25	25	25	25	25	25	25			
+        /// 	24	24	24	24	24	24	24			
+        /// 		23	23	23	23	23	23			
+        /// 			22	22	22	22	22	22		
+        /// 				21	21	21	21	21		
+        /// 					20	20	20	20		
+        /// 						19	19	19	19	
+        /// 							18	18	18	
+        /// 								17	17	
+        /// 									16	16
+        /// 										15
+        /// 
+        /// where each new column is a new combination, 
+        /// number of new columns is given by Value/Units,
+        /// the top downward slope is given by (B) - no coins to subtract for each combination
+        /// and length of each successive column is (C) minus previous length
+        /// 
+        /// and then we can convert this to e.g,. 
+        /// 
+        /// 45 = 1
+        /// 44 = 1
+        /// 43 = 2
+        /// 42 = 2
+        /// etc., 
+        /// 
+        /// And add that to our state - indicating that, e.g., there are 2 combinations where total coins is '43' etc., 
+        /// 
+        /// We could iterate over each column to do this - but this would be inefficient. 
+        /// 
+        /// so instead, we do it directly - by calculating the height of the whole triangle. 
+        /// incrementing the no_of_combos until we reach the mid-point (25) in example above
+        /// and then decrementing the no_of_combos after that until we reach the end point (15). 
+        /// 
+        /// It is grim - but efficient ... 
+        /// 
+        /// 
         /// </summary>
         /// <param name="valueToCalculate"></param>
         /// <param name="arr"></param>
@@ -91,15 +165,32 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                 noCoinsToSubtractForEachUnit = (Head - GetRootUnit()) - 1;
             }
 
+            // every time we have a new coin we reduce our number of coins by 
+            // noCoinsToSubtractForEachUnit - (moving our triangle coin columns down by X)
+            // but we also have less combinations to add ... this represents our net shift). 
+            if (decrementInTotalCoinsForEachCoin == -1)
+            {
+                decrementInTotalCoinsForEachCoin = noCoinsToSubtractForEachUnit - parentState.NumberCombinations();
+            }
+
+
 #if DEBUG
             CalculationValidator.Validate(validationKey,differenceInParentComboNumberForEachCoin,noCoinsToSubtractForEachUnit);
 #endif
+            // work in no-of-coin units. 
+            // start of triangle
+            var triangleStart = parentState.MaxParentCoins - noCoinsToSubtractForEachUnit; 
+            // triangleWidth = no-new-combinations - 1;
+            var triangleWidth = (valueToCalculate / Head) - 1;
 
-            // counts backwards from MaxCoins to Min-Coins via step 
-            foreach (var c in parentState)
-            {
+            var incrementDecreaseOnEveryCombination = 
 
-            }
+            // first Combo end = go down NumberCombinations of parent then up again the differenceInParentComboNumberForEachCoin;
+            var pointToSwitchFromIncrementToDecrement = (triangleStart - parentState.NumberCombinations()) + differenceInParentComboNumberForEachCoin;
+
+            // we finish once
+            var triangleEnd = pointToSwitchFromIncrementToDecrement - (triangleWidth*differenceInParentComboNumberForEachCoin);
+            
 
             return 1;
         }

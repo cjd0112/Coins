@@ -5,53 +5,7 @@ using System.Linq;
 
 namespace CoinsLib.CombinationCalculator.CalculationForest
 {
-    public struct CalcState : IEnumerable<int>,IEnumerator<int>
-    {
-        public CalcState(int max, int min, int step)
-        {
-            MaxParentCoins = max;
-            MinParentCoins = min;
-            Step = step;
-        }
-        public int MaxParentCoins;
-        public int MinParentCoins;
-        public int Step;
-
-        public int NumberCombinations()
-        {
-            return (MaxParentCoins - MinParentCoins) / Step;
-        }
-
-
-        public IEnumerator<int> GetEnumerator()
-        {
-            return this;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public bool MoveNext()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Reset()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int Current { get; }
-
-        object IEnumerator.Current => Current;
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-    }
+    
     public abstract class CalculationNode
     {
         protected Coin coin;

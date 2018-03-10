@@ -17,9 +17,9 @@ namespace Test3
        
         static void Main(string[] args)
         {
-            int val = 24 * 6;
+            int val = 30;
             var res2 = new Int64[val];
-            var arr2 = new int[] {24,12,6, 2}.ToList();
+            var arr2 = new int[] { 2,1}.ToList();
             
             Console.WriteLine($"Value,{val}");
 
