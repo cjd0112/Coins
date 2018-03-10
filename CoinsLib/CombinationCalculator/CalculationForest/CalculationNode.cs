@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CoinsLib.CombinationCalculator.CalculationForest
 {
-    public struct CalcState
+    public struct CalcState : IEnumerable<int>,IEnumerator<int>
     {
         public CalcState(int max, int min, int step)
         {
@@ -15,6 +16,41 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         public int MaxParentCoins;
         public int MinParentCoins;
         public int Step;
+
+        public int NumberCombinations()
+        {
+            return (MaxParentCoins - MinParentCoins) / Step;
+        }
+
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public bool MoveNext()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Current { get; }
+
+        object IEnumerator.Current => Current;
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
     public abstract class CalculationNode
     {
@@ -36,8 +72,11 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             this.parent = parent;
         }
 
+        public Coin GetCoin()
+        {
+            return coin;
+        }
 
-        public abstract int PossibleCombinationsForOneCoin();
 
         public CalculationNode AddChild(CalculationNode n)
         {
@@ -57,6 +96,13 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                 return Enumerable.Empty<Int32>();
             return coin.GenerateMyUnits().Skip(1);
 
+        }
+
+        public int GetRootUnit()
+        {
+            if (parent == null)
+                return Head;
+            return parent.GetRootUnit();
         }
 
         public bool IsParent(CalculationNode candidate)

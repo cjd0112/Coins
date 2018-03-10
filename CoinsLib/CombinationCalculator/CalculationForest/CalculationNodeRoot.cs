@@ -11,11 +11,6 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             
         }
 
-        public override int PossibleCombinationsForOneCoin()
-        {
-            return 1;
-       }
-
         public override long CalculateTotalCoins(int valueToCalculate,long[] arr, CalcState parentState,  int depth = 0)
         {
             #if DEBUG
