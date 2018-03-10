@@ -66,7 +66,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             
         List<CalculationNode> children = new List<CalculationNode>();
 
-        public abstract Int64 CalculateTotalCoins(int valuetoCalculate, Int64[] arr, CalcState parentState, int depth = 0);
+        public abstract Int64 CalculateTotalCoins(int valuetoCalculate, Int64[] arr, CalcState parentState=null, int depth = 1);
 
     }
 }

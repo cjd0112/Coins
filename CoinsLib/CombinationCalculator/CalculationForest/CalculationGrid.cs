@@ -41,27 +41,33 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                 return GetLevel(nodes.SelectMany(x => x.GetChildren()), level);
                 
             }
-            void AddToForest(CalculationNode c,int parentLevel)
+            void AddToForest(CalculationNode c,int thisLevel)
             {
-                if (parentLevel == 1)
+                if (thisLevel == 1)
                     forest.Add(c);
                 else
-                    GetLevel(forest,parentLevel).Where(x=>x.IsParent(c)).ForEach(n=>n.AddChild(c));
-            }            
+                    GetLevel(forest,thisLevel-1).Where(x=>x.IsParent(c)).ForEach(n=>n.AddChild(c));
+            }
+
+            CalculationNode Selector(Coin c)
+            {
+                if (c.NodeCount() == 1)
+                    return new CalculationNodeRoot(c);
+                return new CalculationNodeWorker(c);
+            }
+
             // take all combinations group by node-count, sort ascending and add-to forest
             // i.e., do lowest order - '1','2' before '1->6' etc. before '2->6->10' 
             allCombinations
                 .GroupBy(x => x.NodeCount())
                 .OrderBy(x => x.Key)                
-                .ForEach(x=>x.ForEach(n=>AddToForest(new CalculationNodeWorker(n),x.Key)));
+                .ForEach(x=>x.ForEach(n=>AddToForest(Selector(n),x.Key)));
         }        
         
         
         public Int64 CalculateTotalCoins(Int64[] results,int value)
         {
-            //return forest.Sum(x => x.CalculateTotalCoins(results, value,0));
-
-            return 1;
+            return forest.Sum(x => x.CalculateTotalCoins(value,results));
         }
 
     }

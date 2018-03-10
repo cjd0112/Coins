@@ -9,7 +9,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
     /// <summary>
     /// hides the messiness of the CalculationNode worker
     /// let our caller define the triangle parameters
-    /// we can work in 'coin-space' and do the sums
+    /// we can work in base units and do the sums
     /// we are provided the first (right) triangle
     /// |
     /// |
@@ -33,9 +33,8 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
     /// and is where we stop incrementing no-combinations and start decrementing
     /// 
     /// </summary>
-    public class CoinTriangle : IEnumerable<(int coins,int number)>,IEnumerator<(int coins,int number)>
+    public class CoinTriangle : IEnumerable<(int triangleRow,int number)>,IEnumerator<(int triangleRow,int number)>
     {
-        private readonly int convertToCoins = 0;
         private readonly int topDecrement = 0;
         private readonly int bottomDecrement = 0;
         private readonly int heightFirstColumn = 0;
@@ -43,6 +42,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         private readonly int endRow = 0;
         private int currentNumberCombinations = 1;
         private int iterations = 0;
+        private int convertBacktoCoins;
         public CoinTriangle(int maxCoins, int heightFirstColumn, int width, int topDecrement, int bottomDecrement)
         {
             this.heightFirstColumn = heightFirstColumn;
@@ -50,17 +50,14 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             this.bottomDecrement = bottomDecrement;
             this.endRow = heightFirstColumn - (width * bottomDecrement);
             this.currentRow = heightFirstColumn;
-            this.convertToCoins = maxCoins - heightFirstColumn; // add convertToCoins to go back to coin-units.. 
-
+            this.convertBacktoCoins = maxCoins - heightFirstColumn;
             Debug.Assert(endRow <= 0);
-            Debug.Assert(convertToCoins> 0);
             Debug.Assert(width >= 1);
-            Debug.Assert(maxCoins >0);
             Debug.Assert(topDecrement > bottomDecrement);
             
         }
 
-        public IEnumerator<(int coins, int number)> GetEnumerator()
+        public IEnumerator<(int triangleRow, int number)> GetEnumerator()
         {
             return this;
 
@@ -97,7 +94,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             currentRow = heightFirstColumn;
         }
 
-        public (int coins, int number) Current => (currentRow + convertToCoins, currentNumberCombinations);
+        public (int triangleRow, int number) Current => (currentRow + convertBacktoCoins, currentNumberCombinations);
 
         object IEnumerator.Current => Current;
 

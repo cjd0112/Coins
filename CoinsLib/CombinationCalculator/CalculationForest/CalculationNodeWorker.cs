@@ -144,7 +144,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         /// <param name="depth"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public override long CalculateTotalCoins(int valueToCalculate,long[] arr, CalcState parentState,int depth = 0)
+        public override long CalculateTotalCoins(int valueToCalculate,long[] arr, CalcState parentState=null,int depth = 1)
         {
             #if DEBUG
             if (depth != this.Depth)
@@ -162,7 +162,10 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 
             if (noCoinsToSubtractForEachUnit == -1)
             {
-                noCoinsToSubtractForEachUnit = (Head - GetRootUnit()) - 1;
+                noCoinsToSubtractForEachUnit = (Head / GetRootUnit()) - 1;
+
+                if (noCoinsToSubtractForEachUnit < 0)
+                    throw new ArgumentException("noCoinsToSubtractForEachUnit must be >=1");
             }
 
             // every time we have a new coin we reduce our number of coins by 
@@ -177,22 +180,28 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 #if DEBUG
             CalculationValidator.Validate(validationKey,differenceInParentComboNumberForEachCoin,noCoinsToSubtractForEachUnit);
 #endif
-            // work in no-of-coin units. 
-            // start of triangle
-            var triangleStart = parentState.MaxParentCoins - noCoinsToSubtractForEachUnit; 
-            // triangleWidth = no-new-combinations - 1;
-            var triangleWidth = (valueToCalculate / Head) - 1;
+            if (valueToCalculate % Head == 0 && valueToCalculate / Head > 0)
+            {
+                int cnt = 0;
+                int max = -1;
+                int min = int.MaxValue;
 
-            var incrementDecreaseOnEveryCombination = 
+                foreach (var (triangleRow, number) in new CoinTriangle(parentState.MaxParentCoins,
+                    parentState.NumberCombinations() - noCoinsToSubtractForEachUnit, valueToCalculate / Head,
+                    noCoinsToSubtractForEachUnit, decrementInTotalCoinsForEachCoin))
+                {
+                    if (max == -1)
+                        max = triangleRow;
+                    min = triangleRow;
+                    arr[triangleRow] += number;
+                    cnt++;
+                }
 
-            // first Combo end = go down NumberCombinations of parent then up again the differenceInParentComboNumberForEachCoin;
-            var pointToSwitchFromIncrementToDecrement = (triangleStart - parentState.NumberCombinations()) + differenceInParentComboNumberForEachCoin;
+                var ourState = new CalcState(max, min, parentState.Step);
+                return cnt + GetChildren().Sum(x => x.CalculateTotalCoins(valueToCalculate, arr, ourState, depth+1));
+            }
 
-            // we finish once
-            var triangleEnd = pointToSwitchFromIncrementToDecrement - (triangleWidth*differenceInParentComboNumberForEachCoin);
-            
-
-            return 1;
+            return 0;
         }
     }
 }

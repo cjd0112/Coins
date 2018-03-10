@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using CoinsLib.Util;
 
@@ -11,7 +12,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             
         }
 
-        public override long CalculateTotalCoins(int valueToCalculate,long[] arr, CalcState parentState,  int depth = 0)
+        public override long CalculateTotalCoins(int valueToCalculate,long[] arr, CalcState parentState=null,  int depth = 1)
         {
             #if DEBUG
             if (valueToCalculate <= 0)
@@ -23,8 +24,8 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             if (arr.Length < valueToCalculate)
                 throw new Exception("passed in array is supposed to be >= max valueToCalculate");
             
-            if (parentState.MaxParentCoins != 0 && parentState.Step != 0 &&  depth != 0)
-                throw new Exception("Expected maxParentCoins, Step and Depth to be 'zero' on calling root node");
+            if (parentState != null)
+                throw new Exception("Expected parentState to be null on calling root node");
             
             #endif 
 
@@ -37,10 +38,10 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                 // keep tally in global record;
                 arr[myCoins]++;
 
-                GetChildren().ForEach(x =>
-                    CalculateTotalCoins(valueToCalculate, arr, new CalcState(myCoins, myCoins, 0),depth++));
+                return 1+ GetChildren().Sum(x =>
+                    x.CalculateTotalCoins(valueToCalculate, arr, new CalcState(myCoins, myCoins-1, 1),depth+1));
             }
-            return 1;
+            return 0;
 
         }
     }
