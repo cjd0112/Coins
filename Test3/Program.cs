@@ -8,6 +8,7 @@ using CoinsLib.CombinationCalculator;
 using CoinsLib.CombinationCalculator.Underlying;
 using CoinsLib.Util;
 
+using System.Windows;
 namespace Test3
 {
     class Program
@@ -16,13 +17,24 @@ namespace Test3
        
         static void Main(string[] args)
         {
-
-            int val =32;
+            int val = 24 * 6;
             var res2 = new Int64[val];
-            var arr2 = new int[] {8, 4, 2, 1}.ToList();
+            var arr2 = new int[] {24,12,6, 2}.ToList();
+            
+            Console.WriteLine($"Value,{val}");
 
             var coins = MagicPurse.GenerateTestCoin(arr2);
-            if (arr2.Count == 3)
+            if (arr2.Count == 1)
+            {
+                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
+                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0]);                                
+            }
+            if (arr2.Count == 2)
+            {
+                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
+                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1]);                
+            }
+            else if (arr2.Count == 3)
             {
                 var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
                 Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2]);
@@ -32,6 +44,12 @@ namespace Test3
                 var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
                 Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2],g[3]);
             }
+            else if (arr2.Count == 5)
+            {
+                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
+                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2],g[3],g[4]);
+            }
+
 
             return;
             
