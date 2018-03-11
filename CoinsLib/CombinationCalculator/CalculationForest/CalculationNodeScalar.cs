@@ -5,14 +5,19 @@ using CoinsLib.Util;
 
 namespace CoinsLib.CombinationCalculator.CalculationForest
 {
-    public class CalculationNodeRoot : CalculationNode
+    /// <summary>
+    /// CalculationNodeScalar is root of tree
+    /// and produces one number which is the 
+    /// number of coins that goes into these units. 
+    /// </summary>
+    public class CalculationNodeScalar : CalculationNode
     {
-        public CalculationNodeRoot(Coin c) : base(c)
+        public CalculationNodeScalar(Coin c,CalculationGrid g) : base(c,g)
         {
             
         }
 
-        public override long CalculateTotalCoins(int valueToCalculate,long[] arr, CalcState parentState=null,  int depth = 1)
+        public override long CalculateTotalCoins(int valueToCalculate,long[] arr,  CalcState parentState=null,  int depth = 1)
         {
             #if DEBUG
             if (valueToCalculate <= 0)
@@ -21,12 +26,14 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             if (coin.Next != null)
                 throw new Exception("Root node is supposed to be singleton");
             
-            if (arr.Length < valueToCalculate)
+            if (arr.Length <= valueToCalculate)
                 throw new Exception("passed in array is supposed to be >= max valueToCalculate");
             
             if (parentState != null)
                 throw new Exception("Expected parentState to be null on calling root node");
             
+            Grid.StartDebug(this,valueToCalculate);
+
             #endif 
 
             // we are singleton - e.g., '9'  if we get hit by '18' then 
@@ -38,11 +45,28 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                 // keep tally in global record;
                 arr[myCoins]++;
 
+#if DEBUG
+                Grid.Debug(this, myCoins, 1);
+
+                Grid.EndDebug(this);
+#endif
                 return 1+ GetChildren().Sum(x =>
                     x.CalculateTotalCoins(valueToCalculate, arr, new CalcState(myCoins, myCoins-1, 1),depth+1));
             }
             return 0;
 
         }
+
+        public override int GetMaxRemainderForValue(int value)
+        {
+            return value - Head;
+        }
+
+        public override int GetMaxCombinationsForValue(int value)
+        {
+            return 1;
+        }
+
+
     }
 }

@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculationGridTests.cs" />
     <Compile Include="CoinCalculator2Tests.cs" />
     <Compile Include="CoinCalculatorTests.cs" />
     <Compile Include="LSDParserTests.cs" />

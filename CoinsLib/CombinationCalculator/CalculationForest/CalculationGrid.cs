@@ -31,9 +31,34 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
     public class CalculationGrid
     { 
         private IList<CalculationNode> forest = new List<CalculationNode>();
-      
-        public CalculationGrid(IEnumerable<Coin> allCombinations)
+
+    
+        public String ComboKey(CalculationNode n)
         {
+            return n.GetCoin().GenerateMyUnits().Aggregate("", (x, y) => x += y);
+        }
+
+        private CalculationGridDebugger debugger;
+
+        public void StartDebug(CalculationNode n, int value)
+        {
+            debugger.StartDebug(n,value);
+        }
+
+        public void Debug(CalculationNode n, int noCoins, int noCombinations)
+        {
+            debugger.Debug(n,noCoins,noCombinations);
+        }
+
+        public void EndDebug(CalculationNode n)
+        {
+            debugger.EndDebug(n);
+        }
+
+        public CalculationGrid(IEnumerable<Coin> allCombinations,Func<String, int,bool> filter = null, Action<DebugState> reporter=null)
+        {
+            debugger = new CalculationGridDebugger(filter, reporter);
+
             IEnumerable<CalculationNode> GetLevel(IEnumerable<CalculationNode> nodes,int level)
             {
                 if (nodes.First().Depth == level)
@@ -52,8 +77,10 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             CalculationNode Selector(Coin c)
             {
                 if (c.NodeCount() == 1)
-                    return new CalculationNodeRoot(c);
-                return new CalculationNodeWorker(c);
+                    return new CalculationNodeScalar(c,this);
+                else if (c.NodeCount() == 2)
+                    return new CalculationNodeVector(c,this);
+                return new CalculationNodeTriangle(c,this);
             }
 
             // take all combinations group by node-count, sort ascending and add-to forest

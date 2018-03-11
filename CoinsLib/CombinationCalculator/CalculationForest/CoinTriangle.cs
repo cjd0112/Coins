@@ -42,7 +42,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         private readonly int endRow = 0;
         private int currentNumberCombinations = 1;
         private int iterations = 0;
-        private int convertBacktoCoins;
+        private readonly int convertBacktoCoins;
         public CoinTriangle(int maxCoins, int heightFirstColumn, int width, int topDecrement, int bottomDecrement)
         {
             this.heightFirstColumn = heightFirstColumn;
@@ -70,7 +70,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 
         public bool MoveNext()
         {
-            bool ret = currentRow-- >  endRow;
+            bool ret = currentRow >  endRow;
             if (ret)
             {
                 iterations++;
@@ -84,6 +84,8 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                     if (iterations % bottomDecrement == 0)
                         currentNumberCombinations--;
                 }
+
+                currentRow--;
             }
 
             return ret;
@@ -94,7 +96,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             currentRow = heightFirstColumn;
         }
 
-        public (int triangleRow, int number) Current => (currentRow + convertBacktoCoins, currentNumberCombinations);
+        public (int triangleRow, int number) Current => ((currentRow+1) + convertBacktoCoins, currentNumberCombinations);
 
         object IEnumerator.Current => Current;
 

@@ -6,16 +6,13 @@ using CoinsLib.Coins;
 
 namespace CoinsLib.CombinationCalculator.CalculationForest
 {
-    public class CalculationNodeWorker : CalculationNode
+    public class CalculationNodeTriangle : CalculationNode
     {
 #if DEBUG
         private String validationKey = "";
 #endif
-        public CalculationNodeWorker(Coin c):base(c)
+        public CalculationNodeTriangle(Coin c, CalculationGrid g):base(c,g)
         {
-#if DEBUG
-            validationKey = CalculationValidator.Key(this);
-#endif
         }
 
         private int differenceInParentComboNumberForEachCoin = -1;
@@ -157,15 +154,19 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 
             if (differenceInParentComboNumberForEachCoin == -1)
             {
-                differenceInParentComboNumberForEachCoin = parentState.NumberCombinations();
+                // every time we add a new coin at this level we have same as previous level - 
+                // _minus_ the number of parent combinations it takes to make one of our coins.
+                // (given by GetMaxCombinationsForValue - where SumOfUnits is our minimum trigger value). 
+                // plus one - because this is a new combination.
+                differenceInParentComboNumberForEachCoin = parent.GetMaxCombinationsForValue(SumOfUnits) - 1;
             }
 
             if (noCoinsToSubtractForEachUnit == -1)
             {
                 noCoinsToSubtractForEachUnit = (Head / GetRootUnit()) - 1;
 
-                if (noCoinsToSubtractForEachUnit < 0)
-                    throw new ArgumentException("noCoinsToSubtractForEachUnit must be >=1");
+                if (noCoinsToSubtractForEachUnit < 1)
+                    throw new ArgumentException("noCoinsToSubtractForEachUnit expected to be >=1");
             }
 
             // every time we have a new coin we reduce our number of coins by 
@@ -173,31 +174,46 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             // but we also have less combinations to add ... this represents our net shift). 
             if (decrementInTotalCoinsForEachCoin == -1)
             {
-                decrementInTotalCoinsForEachCoin = noCoinsToSubtractForEachUnit - parentState.NumberCombinations();
+                decrementInTotalCoinsForEachCoin = noCoinsToSubtractForEachUnit - differenceInParentComboNumberForEachCoin;
             }
 
-
 #if DEBUG
-            CalculationValidator.Validate(validationKey,differenceInParentComboNumberForEachCoin,noCoinsToSubtractForEachUnit);
+            Grid.StartDebug(this,valueToCalculate);
 #endif
-            if (valueToCalculate % Head == 0 && valueToCalculate / Head > 0)
+
+            if (valueToCalculate-SumOfUnits >= 0 )
             {
+                var thisNumberCombinations = ((valueToCalculate - SumOfUnits) / Head)+1;
+
                 int cnt = 0;
                 int max = -1;
                 int min = int.MaxValue;
+                int ourStartingNoCoins = parentState.MaxParentCoins - noCoinsToSubtractForEachUnit;
 
-                foreach (var (triangleRow, number) in new CoinTriangle(parentState.MaxParentCoins,
-                    parentState.NumberCombinations() - noCoinsToSubtractForEachUnit, valueToCalculate / Head,
+                // our first column - to the right-angled part of triangle height = same as height of parentState
+                // minus the decrementInTotalCoinsForEachCoin
+                int ourHeight =(parentState.NumberCombinations - differenceInParentComboNumberForEachCoin);
+
+                foreach (var (triangleRow, number) in new CoinTriangle(ourStartingNoCoins,
+                    ourHeight, thisNumberCombinations,
                     noCoinsToSubtractForEachUnit, decrementInTotalCoinsForEachCoin))
                 {
                     if (max == -1)
                         max = triangleRow;
                     min = triangleRow;
                     arr[triangleRow] += number;
+
+#if DEBUG
+                    Grid.Debug(this,triangleRow,number);
+#endif
                     cnt++;
                 }
 
-                var ourState = new CalcState(max, min, parentState.Step);
+#if DEBUG
+                Grid.EndDebug(this);
+#endif 
+
+                var ourState = new CalcState(max, min, cnt);
                 return cnt + GetChildren().Sum(x => x.CalculateTotalCoins(valueToCalculate, arr, ourState, depth+1));
             }
 
