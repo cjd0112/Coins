@@ -89,7 +89,13 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                 .GroupBy(x => x.NodeCount())
                 .OrderBy(x => x.Key)                
                 .ForEach(x=>x.ForEach(n=>AddToForest(Selector(n),x.Key)));
-        }        
+        }
+
+
+        public CalculationNode FindNode(String comboKey)
+        {
+            forest.Select(x=>x.FindNode(comboKey)).Where()
+        }
         
         
         public Int64 CalculateTotalCoins(Int64[] results,int value)

@@ -104,5 +104,18 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             return parent.GetMaxRemainderForValue(value) / Head;
         }
 
+        public CalculationNode FindNode(string comboKey)
+        {
+            if (this.ComboKey == comboKey)
+                return this;
+            
+            
+            foreach (var c in GetChildren())
+            {
+                if (c.FindNode(comboKey) != null)
+                    
+            }
+        }
+
     }
 }

@@ -13,45 +13,63 @@ namespace Test3
 {
     class Program
     {
-      
-       
         static void Main(string[] args)
         {
-            int val = 14;
-            var res2 = new Int64[val];
-            var arr2 = new int[] {4, 2,1}.ToList();
-            
-            Console.WriteLine($"Value,{val}");
+            if (args.Length == 0 || args.Length > 2)
+            {
+                Console.WriteLine("Expected either r 23 (run a value) or t (run tests)");
+                return;
+            }
+            if (args[0] == "r")
+            {
+                int val = Convert.ToInt32(args[1]);
+                var res2 = new Int64[val];
+                var arr2 = new int[] {4, 2,1}.ToList();
 
-            var coins = MagicPurse.GenerateTestCoin(arr2);
-            if (arr2.Count == 1)
-            {
-                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
-                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0]);                                
+                Console.WriteLine($"Value,{val}");
+
+                var coins = MagicPurse.GenerateTestCoin(arr2);
+                if (arr2.Count == 1)
+                {
+                    var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val)
+                        .ToArray();
+                    Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0]);
+                }
+                if (arr2.Count == 2)
+                {
+                    var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val)
+                        .ToArray();
+                    Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1]);
+                }
+                else if (arr2.Count == 3)
+                {
+                    var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val)
+                        .ToArray();
+                    Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2]);
+                }
+                else if (arr2.Count == 4)
+                {
+                    var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val)
+                        .ToArray();
+                    Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2], g[3]);
+                }
+                else if (arr2.Count == 5)
+                {
+                    var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val)
+                        .ToArray();
+                    Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2], g[3], g[4]);
+                }
             }
-            if (arr2.Count == 2)
+            else if (args[0] == "t")
             {
-                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
-                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1]);                
-            }
-            else if (arr2.Count == 3)
-            {
-                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
-                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2]);
-            }
-            else if (arr2.Count == 4)
-            {
-                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
-                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2],g[3]);
-            }
-            else if (arr2.Count == 5)
-            {
-                var g = ValuesAndMultiplesForEvenFactors.GenerateValuesAndMultiplesRecursive(coins, val).ToArray();
-                Printer.CalculateTotalCoinsForEachComboAndReturnCount(res2, val, g[0], g[1], g[2],g[3],g[4]);
+                var z = new Tester();
+                if (args.Length > 1)
+                    z.RunTests(args[1]);
+                else
+                    z.RunTests();
             }
 
-
-            return;
+           return;
             
             
             bool printResults = false;
