@@ -194,6 +194,9 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
                 // minus the decrementInTotalCoinsForEachCoin
                 int ourHeight =(parentState.NumberCombinations - differenceInParentComboNumberForEachCoin);
 
+                if (ourHeight <= 0)
+                    throw new Exception($"Invalid height of triange - {ourHeight}");
+
                 foreach (var (triangleRow, number) in new CoinTriangle(ourStartingNoCoins,
                     ourHeight, thisNumberCombinations,
                     noCoinsToSubtractForEachUnit, decrementInTotalCoinsForEachCoin))
@@ -206,7 +209,8 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 #if DEBUG
                     Grid.Debug(this,triangleRow,number);
 #endif
-                    cnt++;
+                    if (number > 0)
+                        cnt++;
                 }
 
 #if DEBUG

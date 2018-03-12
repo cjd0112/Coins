@@ -57,16 +57,5 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 
         }
 
-        public override int GetMaxRemainderForValue(int value)
-        {
-            return value - Head;
-        }
-
-        public override int GetMaxCombinationsForValue(int value)
-        {
-            return 1;
-        }
-
-
     }
 }

@@ -24,7 +24,7 @@ namespace Test3
             {
                 int val = Convert.ToInt32(args[1]);
                 var res2 = new Int64[val];
-                var arr2 = new int[] {4, 2,1}.ToList();
+                var arr2 = new int[] {6,2,1}.ToList();
 
                 Console.WriteLine($"Value,{val}");
 
@@ -68,6 +68,8 @@ namespace Test3
                 else
                     z.RunTests();
             }
+
+            Console.ReadLine();
 
            return;
             

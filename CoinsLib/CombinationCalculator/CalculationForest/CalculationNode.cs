@@ -80,14 +80,6 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
 
         public abstract Int64 CalculateTotalCoins(int valuetoCalculate,  Int64[] arr, CalcState parentState=null, int depth = 1);
 
-        public virtual int GetMaxRemainderForValue(int value)
-        {
-            if (parent == null)
-                throw new Exception("Internal error - null parent should be overridden by CalculationNodeScalar ...");
-
-            return parent.GetMaxRemainderForValue(value) - Head;
-        }
-
         /// <summary>
         /// Given a value will return the maximum combinations that this Coin
         /// will return. 
@@ -98,24 +90,32 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         /// <returns>Max combinations for this value for this Coin </returns>
         public virtual int GetMaxCombinationsForValue(int value)
         {
-            if (parent == null)
-                throw new Exception("Internal error - null parent should be overridden by CalculationNodeScalar ...");
+            var allCoins = TotalCoinsForEachCombinationForValue(coin, value).ToArray();
 
-            return parent.GetMaxRemainderForValue(value) / Head;
+            return allCoins.Distinct().Count();
         }
 
-        public CalculationNode FindNode(string comboKey)
+        static IEnumerable<Int64> TotalCoinsForEachCombinationForValue(Coin c, int value, int totalCoins = 0)
         {
-            if (this.ComboKey == comboKey)
-                return this;
-            
-            
-            foreach (var c in GetChildren())
+            if (c.Next == null)
             {
-                if (c.FindNode(comboKey) != null)
-                    
+                if (value % c.Units == 0 && value > 0)
+                    yield return value / c.Units + totalCoins;
+            }
+            else
+            {
+                for (int i = 1; i <= value / c.Units; i++)
+                {
+                    totalCoins++;
+                    foreach (var x in TotalCoinsForEachCombinationForValue(c.Next, value - i * c.Units, totalCoins))
+                    {
+                        yield return x;
+                    }
+                }
             }
         }
+
+
 
     }
 }
