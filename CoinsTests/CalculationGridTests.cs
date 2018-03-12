@@ -137,7 +137,16 @@ namespace CoinsTest
 
         }
 
-
+        /*
+         * Value,14
+4,2,1,TotalCoins
+1,1,8,10
+1,2,6,9
+1,3,4,8
+1,4,2,7
+2,1,4,7
+2,2,2,6
+         */
         [Test]
         public void TestTriangle3With2Combo()
         {

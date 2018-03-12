@@ -48,7 +48,7 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
             this.heightFirstColumn = heightFirstColumn;
             this.topDecrement = topDecrement;
             this.bottomDecrement = bottomDecrement;
-            this.endRow = heightFirstColumn - (width * bottomDecrement);
+            this.endRow = - ((width -1)* bottomDecrement);
             this.currentRow = heightFirstColumn;
             this.convertBacktoCoins = maxCoins - heightFirstColumn;
             Debug.Assert(endRow <= 0);
