@@ -15,6 +15,26 @@ namespace Test3
     {
         static void Main(string[] args)
         {
+            
+            var z2 = MagicPurse.GenerateTestCoin(new int[]{12,6,2,1}.ToList());
+
+            for (int i = 0; i < 5; i++)
+            {
+                var foo = z2.TotalCoinsForEachCombinationForValue(40+i);
+
+                foo.GroupBy(x => x).OrderBy(x => x.Key).ForEach(
+                    x =>
+                    {
+                        Console.WriteLine($"{i},{x.Key},{x.Count()}");
+                    });
+
+            }
+
+            return;
+
+            
+            
+            
             if (args.Length == 0 || args.Length > 2)
             {
                 Console.WriteLine("Expected either r 23 (run a value) or t (run tests)");
@@ -69,7 +89,6 @@ namespace Test3
                     z.RunTests();
             }
 
-            Console.ReadLine();
 
            return;
             

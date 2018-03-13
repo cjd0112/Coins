@@ -379,6 +379,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
             var transitionFactor2 = n2.multiple / n3.multiple;
+           
 
             Int64 cnt = 0;
 
@@ -425,6 +426,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         public static Int64 CalculateTotalCoinsForEachComboAndReturnCount(Int64[] arr,int maximumCoins, int valueForAssert, (int value, int multiple) n1, (int value, int multiple) n2)
         {
             var transitionFactor1 = n1.multiple / n2.multiple;
+            
 
             Int64 cnt = 0;
             for (var j = 0; j < n1.value; j++)
@@ -453,6 +455,10 @@ namespace CoinsLib.CombinationCalculator.Underlying
             }
             return cnt;
         }
+        
+        
+        
+        
         /// <summary>
         /// See comment above
         /// </summary>           
@@ -460,6 +466,7 @@ namespace CoinsLib.CombinationCalculator.Underlying
         {
             Int64 cnt = 0;
 #if DEBUG
+                        
             if (arr.Length < valueForAssert)
                 throw new Exception("arr.Length has to be >= valueForAssert");
             if (n1.noCoins * n1.multiple != valueForAssert)

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Xml.Schema;
 using CoinsLib.CombinationCalculator;
 using CoinsLib.CombinationCalculator.CalculationForest;
 
@@ -392,6 +394,127 @@ namespace Test3
             Assert(()=>comboHit1);
 
         }
+        
+        public void Test17()
+        {
+            int val = 15;
+            Int64[] arr = new Int64[val + 1];
+            bool comboHit1 = false;
+            bool comboHit2 = false;
+            var z = new CalculationGrid(MagicPurse.GenerateTestCoin(new[] { 8, 4, 2, 1 }.ToList()).AllCombinations(),
+                (string comboKey, int value) => comboKey == "8421" || comboKey == "841", (state =>
+                {
+                    if (state.node.ComboKey == "8421")
+                    {
+                        Assert(()=> state.CoinsAndCombos.Count() == 1);
+                        Assert(()=> state.CoinsAndCombos.Contains((4, 1)));
+
+                        comboHit1 = true;
+                    }
+
+                    if (state.node.ComboKey == "841")
+                    {
+                        Assert(()=>state.CoinsAndCombos.Count() == 1);
+                        Assert(()=>state.CoinsAndCombos.Contains((5,1)));
+                        comboHit2 = true;
+                    }
+                }));
+            z.CalculateTotalCoins(arr, val);
+            Assert(()=> comboHit1 && comboHit2);
+
+        }
+
+        public void Test18()
+        {
+            int val = 9;
+            Int64[] arr = new Int64[val + 1];
+            bool comboHit1 = false;
+            var z = new CalculationGrid(MagicPurse.GenerateTestCoin(new[] { 6, 2, 1 }.ToList()).AllCombinations(),
+                (string comboKey, int value) => comboKey == "621", (state =>
+                {
+                    if (state.node.ComboKey == "621")
+                    {
+                        Assert(()=>state.CoinsAndCombos.Count() == 1);
+                        Assert(()=>state.CoinsAndCombos.Contains((3, 1)));
+
+                        comboHit1 = true;
+                    }
+
+                }));
+            z.CalculateTotalCoins(arr, val);
+            Assert(()=>comboHit1);
+
+        }
+
+        void ValidateResults(IEnumerable<Int32> eachCombination, IEnumerable<(int noCoins, int times)> f)
+        {
+            Assert(()=>eachCombination.Distinct().Count() == f.Count());
+            foreach (var c in f)
+            {
+                Assert(()=>eachCombination.Count(x => x == c.noCoins) == c.times);
+            }
+        }
+
+        public void Test19()
+        {
+            return;
+            for (int val = 21; val < 100; val++)
+            {
+                Int64[] arr = new Int64[val + 1];
+                bool comboHit1 = false;
+                var z = new CalculationGrid(MagicPurse.GenerateTestCoin(new[] { 12, 6, 2, 1 }.ToList()).AllCombinations(),
+                    (string comboKey, int value) => comboKey == "12621" , (state =>
+                    {
+                        if (state.node.ComboKey == "12621")
+                        {
+                            var alternateResult = state.node.GetCoin().TotalCoinsForEachCombinationForValue(val);                        
+                            ValidateResults(alternateResult.Select(Convert.ToInt32),state.CoinsAndCombos);
+                        
+                        
+                            comboHit1 = true;
+                        }
+
+                    }));
+                z.CalculateTotalCoins(arr, val);
+                Assert(()=>comboHit1 );
+               
+            }
+ 
+        }
+        
+        /*
+         * Value,23
+12,6,2,1,TotalCoins
+1,1,1,3,6
+1,1,2,1,5
+
+         */
+        
+        public void Test20()
+        {
+            int val = 23;
+            Int64[] arr = new Int64[val + 1];
+            bool comboHit1 = false;
+            var z = new CalculationGrid(MagicPurse.GenerateTestCoin(new[] { 12, 6, 2, 1 }.ToList()).AllCombinations(),
+                (string comboKey, int value) => comboKey == "12621" , (state =>
+                {
+                    if (state.node.ComboKey == "12621")
+                    {
+                        var alternateResult = state.node.GetCoin().TotalCoinsForEachCombinationForValue(val);                        
+                        ValidateResults(alternateResult.Select(Convert.ToInt32),state.CoinsAndCombos);
+                    
+                    
+                        comboHit1 = true;
+                    }
+
+                }));
+            z.CalculateTotalCoins(arr, val);
+            Assert(()=>comboHit1 );
+ 
+        }
+
+        
+        
         public void RunTests(String oneTest = "")
         {
             foreach (var c in typeof(Tester).GetMethods().Where(x => x.Name.StartsWith("Test")))

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using CoinsLib.Coins;
 using CoinsLib.CombinationCalculator;
-using CoinsLib.CombinationCalculator.CalculationForest;
+using CoinsLib.CombinationCalculator.Cache;
 using CoinsLib.Util;
 
 namespace Coins
@@ -15,13 +15,22 @@ namespace Coins
         {
             try
             {
-                int num = 3;
+                int num = 100;
+                
+                var s = new Stopwatch();
 
+                s.Start();
+
+                
                 var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
                 Console.WriteLine($"Correct res = {oldRes}");
+                
+                Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
 
-                var s = new Stopwatch();
+                s.Stop();
+                
+                s = new Stopwatch();
 
                 s.Start();
 
@@ -29,7 +38,7 @@ namespace Coins
 
                 var reducer = new ComboReducer(num);
 
-                bool validate = false;
+                bool validate = true;
 
                 bool useOldMethod = false;
 
@@ -72,11 +81,10 @@ namespace Coins
                 else
                 {
                     Int64 totalNumberCombinations = 0;
-                    var calculationGrid = new CalculationGrid(coins.AllCombinations().ToArray());
+                    var calculationGrid = new CalculationGrid(coins.AllCombinations().ToArray(),num);
                     foreach (var i in Enumerable.Range(1,num-1).Zip(Enumerable.Range(1,num-1).Reverse(),(x,y)=>(x,y)))
                     {
                         var maxCoins = i.Item2;
-                        totalNumberCombinations =
                             calculationGrid.CalculateTotalCoins(reducer.GetStorageArrayForValue(i.Item1), i.Item1);
                     }
 

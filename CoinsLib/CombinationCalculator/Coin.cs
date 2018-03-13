@@ -164,6 +164,26 @@ namespace CoinsLib.CombinationCalculator
             }
         }
 
+        public IEnumerable<Int64> TotalCoinsForEachCombinationForValue(int value, int totalCoins = 0)
+        {
+            if (Next == null)
+            {
+                if (value % Units == 0 && value > 0)
+                    yield return value / Units + totalCoins;
+            }
+            else
+            {
+                for (int i = 1; i <= value / Units; i++)
+                {
+                    totalCoins++;
+                    foreach (var x in Next.TotalCoinsForEachCombinationForValue( value - i * Units, totalCoins))
+                    {
+                        yield return x;
+                    }
+                }
+            }
+        }
+        
         /// <summary>
         ///  how many nodes ... 
         /// </summary>

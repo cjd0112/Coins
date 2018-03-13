@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using CoinsLib.CombinationCalculator.Cache;
 using CoinsLib.CombinationCalculator.Underlying;
 using CoinsLib.Util;
 
