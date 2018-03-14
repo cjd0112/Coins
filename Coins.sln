@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coins", "Coins\Coins.csproj", "{08A94849-68C7-4A25-842F-BA459F22AF79}"
 EndProject
@@ -10,13 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinsTest", "CoinsTests\CoinsTest.csproj", "{2D4BEF9B-7752-4998-8CAB-9DE1760EE329}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scala", "Scala", "{6A18DDD5-3216-49FB-B13E-F3DD9078315F}"
-ProjectSection(SolutionItems) = preProject
-	Scala\Coins.scala = Scala\Coins.scala
-EndProjectSection
+	ProjectSection(SolutionItems) = preProject
+		Scala\Coins.scala = Scala\Coins.scala
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test3", "Test3\Test3.csproj", "{AA998004-2330-454D-8131-04E4F7687742}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpFastPFORCore", "CSharpFastPFOR\CSharpFastPFORCore\CSharpFastPFORCore.csproj", "{817DC5A9-4EAD-4BD1-9095-C50D98833FA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test3", "Test3\Test3.csproj", "{AA998004-2330-454D-8131-04E4F7687742}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,10 +38,6 @@ Global
 		{AA998004-2330-454D-8131-04E4F7687742}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA998004-2330-454D-8131-04E4F7687742}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA998004-2330-454D-8131-04E4F7687742}.Release|Any CPU.Build.0 = Release|Any CPU
-		{817DC5A9-4EAD-4BD1-9095-C50D98833FA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{817DC5A9-4EAD-4BD1-9095-C50D98833FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{817DC5A9-4EAD-4BD1-9095-C50D98833FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{817DC5A9-4EAD-4BD1-9095-C50D98833FA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

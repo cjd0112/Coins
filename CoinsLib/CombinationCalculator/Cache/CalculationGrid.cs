@@ -65,30 +65,8 @@ namespace CoinsLib.CombinationCalculator.Cache
         
         public void CalculateTotalCoins(Int64[] results,int value)
         {
-            allNodes.ForEach(x=>x.OnStartProcessing(value));
             allNodes.ForEach(x=>x.CalculateTotalCoins(value,results,value,0));
-            allNodes.ForEach(x=>x.OnEndProcessing(value));
         }
 
-        public void Finalize(Int64[][] results)
-        {
-            foreach (var cache in allNodes.Where(x => x.UseCache()).Select(x => x.GetCache()).ToArray())
-            {
-                cache.StreamCombinationsFromCache(next =>
-                {
-                    if (next.finished == false)
-                    {
-                        var resultsForValue = results[next.value];
-                        foreach (var c in next.totalCoins)
-                        {
-                            foreach (var q in next.combinations)
-                            {
-                                resultsForValue[c + q]++;
-                            }
-                        }
-                    }
-                });
-            }
-        }
     }
 }

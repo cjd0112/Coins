@@ -15,18 +15,18 @@ namespace Coins
         {
             try
             {
-                int num = 500;
+                int num = 1000;
                 
                 var s = new Stopwatch();
 
                 s.Start();
 
                 
-       //        var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
+               //var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
-        //        Console.WriteLine($"Correct res = {oldRes}");
+                ///Console.WriteLine($"Correct res = {oldRes}");
                 
-                Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
+             Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
 
                 s.Stop();
                 
@@ -91,13 +91,8 @@ namespace Coins
                             calculationGrid.CalculateTotalCoins(reducer.GetStorageArrayForValue(i.Item1), i.Item1);
                     }
                     
-                    Console.WriteLine($"combos finished - {s.ElapsedMilliseconds}");
 
                     s.Stop();
-
-                    s.Restart();
-                    
-                    calculationGrid.Finalize(reducer.GetStorageArray());
                     
                     Console.WriteLine($"reducer finished - {s.ElapsedMilliseconds}");
                     
