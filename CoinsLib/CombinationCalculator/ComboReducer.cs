@@ -55,6 +55,11 @@ namespace CoinsLib.CombinationCalculator
             return reducerGrid[value];
         }
 
+        public Int64[][] GetStorageArray()
+        {
+            return reducerGrid;
+        }
+
 
         /// <summary>
         /// Given two values - it will find the two corresponding

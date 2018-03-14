@@ -15,25 +15,11 @@ namespace Test3
     {
         static void Main(string[] args)
         {
-            
-            var z2 = MagicPurse.GenerateTestCoin(new int[]{12,6,2,1}.ToList());
-
-            for (int i = 0; i < 5; i++)
-            {
-                var foo = z2.TotalCoinsForEachCombinationForValue(40+i);
-
-                foo.GroupBy(x => x).OrderBy(x => x.Key).ForEach(
-                    x =>
-                    {
-                        Console.WriteLine($"{i},{x.Key},{x.Count()}");
-                    });
-
-            }
-
-            return;
-
-            
-            
+            var z1 = new Tester2();
+            if (args.Length > 1)
+                z1.RunTests(args[1]);
+            else
+                z1.RunTests();
             
             if (args.Length == 0 || args.Length > 2)
             {

@@ -15,16 +15,16 @@ namespace Coins
         {
             try
             {
-                int num = 100;
+                int num = 500;
                 
                 var s = new Stopwatch();
 
                 s.Start();
 
                 
-                var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
+       //        var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
-                Console.WriteLine($"Correct res = {oldRes}");
+        //        Console.WriteLine($"Correct res = {oldRes}");
                 
                 Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
 
@@ -34,8 +34,11 @@ namespace Coins
 
                 s.Start();
 
+                //   var coins = MagicPurse.GenerateTestCoin(new []{12,6, 2, 1}.ToList());
+
                 var coins = MagicPurse.GenerateCoinStatic();
 
+                
                 var reducer = new ComboReducer(num);
 
                 bool validate = true;
@@ -87,6 +90,19 @@ namespace Coins
                         var maxCoins = i.Item2;
                             calculationGrid.CalculateTotalCoins(reducer.GetStorageArrayForValue(i.Item1), i.Item1);
                     }
+                    
+                    Console.WriteLine($"combos finished - {s.ElapsedMilliseconds}");
+
+                    s.Stop();
+
+                    s.Restart();
+                    
+                    calculationGrid.Finalize(reducer.GetStorageArray());
+                    
+                    Console.WriteLine($"reducer finished - {s.ElapsedMilliseconds}");
+                    
+                    
+
 
                     // now the total number of ways to divide the number is the sum of each
                     // pairs 'number of combinations in common'

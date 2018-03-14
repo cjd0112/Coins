@@ -31,7 +31,7 @@ namespace CoinsLib.CombinationCalculator.Cache
             debugger.EndDebug(n);
         }
 
-        private IEnumerable<CalculationNode> leafNodes;
+        private IEnumerable<CalculationNode> allNodes;
 
         public int MaxValue;
         
@@ -53,8 +53,6 @@ namespace CoinsLib.CombinationCalculator.Cache
                     GetLevel(forest,thisLevel-1).Where(x=>x.IsParent(c)).ForEach(n=>n.AddChild(c));
             }
 
-           
-
             // take all combinations group by node-count, sort ascending and add-to forest
             // i.e., do lowest order - '1','2' before '1->6' etc. before '2->6->10' 
             allCombinations
@@ -62,18 +60,35 @@ namespace CoinsLib.CombinationCalculator.Cache
                 .OrderBy(x => x.Key)                
                 .ForEach(x=>x.ForEach(n=>AddToForest(new CalculationNode(n,this),x.Key)));
 
-            leafNodes = forest.SelectMany(x => x.GetAllNodes()).ToArray();
+            allNodes = forest.SelectMany(x => x.GetAllNodes()).ToArray();
         }
         
         public void CalculateTotalCoins(Int64[] results,int value)
         {
-            foreach (var c in leafNodes)
-            {
-                c.CalculateTotalCoins(value,results,value,0);
-            }
+            allNodes.ForEach(x=>x.OnStartProcessing(value));
+            allNodes.ForEach(x=>x.CalculateTotalCoins(value,results,value,0));
+            allNodes.ForEach(x=>x.OnEndProcessing(value));
         }
 
+        public void Finalize(Int64[][] results)
+        {
+            foreach (var cache in allNodes.Where(x => x.UseCache()).Select(x => x.GetCache()).ToArray())
+            {
+                cache.StreamCombinationsFromCache(next =>
+                {
+                    if (next.finished == false)
+                    {
+                        var resultsForValue = results[next.value];
+                        foreach (var c in next.totalCoins)
+                        {
+                            foreach (var q in next.combinations)
+                            {
+                                resultsForValue[c + q]++;
+                            }
+                        }
+                    }
+                });
+            }
+        }
     }
-    
-    
 }

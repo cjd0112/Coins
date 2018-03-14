@@ -21,7 +21,7 @@ namespace CoinsLib.CombinationCalculator.Cache
 
         protected CalculationGrid Grid;
 
-        private Dictionary<(int, int), Int64[]> cache;
+        private CompressedIntegerCache cache;
         
         public CalculationNode(Coin c,CalculationGrid grid)
         {
@@ -31,30 +31,34 @@ namespace CoinsLib.CombinationCalculator.Cache
 
             ComboKey = Grid.ComboKey(this);
 
-            if (Depth == 2)
+            if (Depth == 2 || Depth == 3 || Depth == 4)
             {
-                 cache = new Int64[grid.MaxValue][];
+                  cache = new CompressedIntegerCache(grid.MaxValue);
             }
         }
 
-        private bool UseCache()
+        public bool UseCache()
         {
             return cache != null;
         }
-        private Int64[] GetCache(int value)
+
+
+        public CompressedIntegerCache GetCache()
         {
-            if (cache == null)
-                return null;
-            return cache[value];
+            return cache;
         }
 
-        private Int64[] UpdateCache(int value, Int64[] arr)
+        public void OnStartProcessing(int value)
         {
-            cache[value] = arr;
-            return arr;
+            
         }
-        
 
+        public void OnEndProcessing(int value)
+        {
+            if (UseCache())
+                cache.OnEndProcessing(value);
+        }
+       
         public void SetParent(CalculationNode parent)
         {
             this.parent = parent;
@@ -114,23 +118,44 @@ namespace CoinsLib.CombinationCalculator.Cache
             }
             else
             {
-                if (cache != null)
+                if (UseCache() && remainder > 0)
                 {
-                    var foo = GetCache(remainder);
-                    if (foo == null)
+                    if (remainder == 495 && Head == 12)
                     {
-                        var lst = new List<Int64>();
-                        GenerateCache(value, remainder, totalCoins, lst);
-
-                        foo = UpdateCache(remainder,lst.ToArray());
+                        
                     }
-
-                    foreach (var c in foo)
+                    if (cache.ContainsRemainder(remainder) == false)
                     {
-                        arr[c]++;
-                    }
-                    return;
+                        var lst = new List<int>();
+                        GenerateCache(value, remainder, 0, lst);
 
+                        if (lst.Count() > 2)
+                        {
+                            int gap = lst[0] - lst[1];
+
+                            var blah = -1;
+                            foreach (var c in lst)
+                            {
+                                if (blah == -1)
+                                    blah = c;
+                                else
+                                {
+                                    if (blah - c != gap)
+                                    {
+                                        Console.WriteLine("hit here");
+
+                                    }
+                                    blah = c;
+                                }
+                            }
+                        }
+
+                        if (lst.Any())
+                            cache.AddCombinationsToCache(remainder, lst);
+                    }
+                    
+                    cache.AddTotalCoinsToCache(remainder,totalCoins);
+                    
                 }
                 else
                 {
@@ -145,7 +170,7 @@ namespace CoinsLib.CombinationCalculator.Cache
             }
         }
         
-        public void GenerateCache(int value, int remainder,int totalCoins,List<Int64> res)
+        void GenerateCache(int value, int remainder,int totalCoins,List<int> res)
         {
             if (parent == null)
             {
