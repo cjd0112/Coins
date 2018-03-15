@@ -15,6 +15,15 @@ namespace Test3
     {
         static void Main(string[] args)
         {
+            //TestVector.TestThis();
+
+            TestVector.Vector();
+
+            Console.ReadLine();
+
+            return;
+
+
             var z1 = new Tester2();
             if (args.Length > 1)
                 z1.RunTests(args[1]);

@@ -71,6 +71,7 @@ namespace CoinsLib.CombinationCalculator.Cache
         
         public void CalculateTotalCoins(Int64[] results,int value,int maxCoins)
         {
+            allNodes.Where(x => x.Depth == 2).ForEach(x=>x.InitializeCache(value));
             allNodes.ForEach(x=>x.Process(value,results,value,0,maxCoins));
             allNodes.Where(x=>x.SupportsCache()).ForEach(x=>x.ProcessCache(value,results,maxCoins));
         }

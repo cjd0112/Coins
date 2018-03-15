@@ -22,9 +22,9 @@ namespace Coins
                 s.Start();
 
                 
-            //   var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
+               // var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
-              //  Console.WriteLine($"Correct res = {oldRes}");
+              //Console.WriteLine($"Correct res = {oldRes}");
                 
              Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
 
@@ -115,7 +115,9 @@ namespace Coins
                 s.Stop();
                 
                 Console.WriteLine($"Seconds = {s.ElapsedMilliseconds/1000}");
-                                
+
+                Console.WriteLine($"Excluded even - {CalculationNode.ExcludedEven} - {CalculationNode.total} - {CalculationNode.excludedMax}");
+                
 
             }
             catch (Exception e)
