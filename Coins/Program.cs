@@ -22,9 +22,9 @@ namespace Coins
                 s.Start();
 
                 
-               //var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
+            //   var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
-                ///Console.WriteLine($"Correct res = {oldRes}");
+              //  Console.WriteLine($"Correct res = {oldRes}");
                 
              Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
 
@@ -88,7 +88,7 @@ namespace Coins
                     foreach (var i in Enumerable.Range(1,num-1).Zip(Enumerable.Range(1,num-1).Reverse(),(x,y)=>(x,y)))
                     {
                         var maxCoins = i.Item2;
-                            calculationGrid.CalculateTotalCoins(reducer.GetStorageArrayForValue(i.Item1), i.Item1);
+                            calculationGrid.CalculateTotalCoins(reducer.GetStorageArrayForValue(i.Item1), i.Item1,maxCoins);
                     }
                     
 
@@ -115,7 +115,7 @@ namespace Coins
                 s.Stop();
                 
                 Console.WriteLine($"Seconds = {s.ElapsedMilliseconds/1000}");
-
+                                
 
             }
             catch (Exception e)

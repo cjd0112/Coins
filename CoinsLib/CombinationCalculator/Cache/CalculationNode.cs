@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Xml.Schema;
 
 namespace CoinsLib.CombinationCalculator.Cache
@@ -21,7 +24,13 @@ namespace CoinsLib.CombinationCalculator.Cache
 
         protected CalculationGrid Grid;
 
-        private CompressedIntegerCache cache;
+        private int[][] cache;
+
+        public bool SupportsCache()
+        {
+            return cache != null;
+        }
+
         
         public CalculationNode(Coin c,CalculationGrid grid)
         {
@@ -30,23 +39,18 @@ namespace CoinsLib.CombinationCalculator.Cache
             Grid = grid;
             Head = coin.Units;
 
-            ComboKey = Grid.ComboKey(this);
+           ComboKey = Grid.ComboKey(this);
 
-            if (Depth == 2 || Depth == 3 || Depth == 4)
+            if (Depth == 2)
             {
-                  cache = new CompressedIntegerCache(grid.MaxValue);
+                cache = new int[grid.MaxValue][];
             }
+
         }
 
-        public bool UseCache()
+        void ClearCache()
         {
-            return cache != null;
-        }
-
-
-        public CompressedIntegerCache GetCache()
-        {
-            return cache;
+            cache = new int[Grid.MaxValue][];
         }
 
   
@@ -99,75 +103,94 @@ namespace CoinsLib.CombinationCalculator.Cache
         }
 
         protected List<CalculationNode> children = new List<CalculationNode>();
-
-        public void CalculateTotalCoins(int value, Int64[] arr, int remainder,int totalCoins)
+        
+        public void Process(int value, Int64[] arr, int remainder, int totalCoins,int maxCoins)
         {
-            if (parent == null)
+            if (totalCoins > maxCoins)
+                return;
+            if (remainder != 0)
             {
-                if (remainder > 0)
+                if (parent == null)
                 {
-                    if (Head == 1)
-                        arr[remainder + totalCoins]++;
-                    else if (Head == 2 && (remainder & (Head - 1)) == 0)
+                    if (remainder > 0)
                     {
-                        arr[remainder / Head + totalCoins]++;
+                        if (Head == 1)
+                            arr[remainder + totalCoins]++;
+                        else if (Head == 2 && (remainder & (Head - 1)) == 0)
+                        {
+                            arr[remainder / Head + totalCoins]++;
+                        }
+                        else if (remainder % Head == 0)
+                        {
+                            arr[remainder / Head + totalCoins]++;
+                        }
                     }
-                    else if (remainder % Head == 0)
-                    {
-                        arr[remainder / Head + totalCoins]++;
-                    }
-                }
-
-
-                //if (remainder > 0 && remainder % Head == 0 )
-                //arr[remainder / Head + totalCoins]++;
-            }
-            else
-            {
-                if (UseCache() && remainder > 0)
-                {
-                    CoinCompressor cc = null;
-                    if (cache.ContainsRemainder(remainder) == false)
-                    {
-                        cc = new CoinCompressor();
-                        GenerateCache(value, remainder, 0, cc);
-                        cc.Finished();
-                        cache.AddCombinationsToCache(remainder, cc);
-                    }
-                    else
-                    {
-                        cc = cache.GetCompressor(remainder);
-                    }
-
-                    /*
-                    foreach (var c in new CoinDecompressor(cc))
-                    {
-                        arr[c + totalCoins]++;
-                    }
-                    */
-                    
                 }
                 else
                 {
-                    for (int i = 1; i <= remainder / Head; i++)
+                    if (SupportsCache())
                     {
-                        totalCoins++;
-                        parent.CalculateTotalCoins(value, arr, remainder - i * Head, totalCoins);
-                    }
-                    
-                }
+                        if (cache[remainder] == null)
+                        {
+                            cache[remainder] = new int[Grid.MaxValue];
 
+                        }
+                        cache[remainder][totalCoins]++;
+                    }
+                    else
+                    {
+                        for (int i = 1; i <=remainder/Head;i++)
+                        {
+                            totalCoins++;
+                            if (totalCoins > maxCoins)
+                                break;
+                            parent.Process(value,arr, remainder - i * Head, totalCoins,maxCoins);
+                        }                        
+                    }
+                }
             }
         }
-        
-        void GenerateCache(int value, int remainder,int totalCoins,CoinCompressor res)
+
+        public void ProcessCache(int value, Int64[] arr,int maxCoins)
+        {
+           if (SupportsCache() == false)
+               throw new Exception("Doesn't support cache");
+            
+            for (int i = 0; i < Grid.MaxValue; i++)
+            {
+                var totalCoinList = cache[i];
+                if (totalCoinList != null)
+                {
+                    List<int> thisCoins = new List<int>();
+
+                    GenerateCache2(value, i, 0, thisCoins,maxCoins);
+
+                    foreach (var c in thisCoins)
+                    {
+                        
+                        for (int p = 0; p < Grid.MaxValue; p++)
+                        {
+                            if (totalCoinList[p] != 0)
+                            {
+                                arr[p + c] += totalCoinList[p];
+                            }
+                        }
+                    }
+
+                }
+            }
+            ClearCache();
+        }
+
+
+        void GenerateCache2(int value, int remainder,int totalCoins,List<int> res,int maxCoins)
         {
             if (parent == null)
             {
                 if (remainder > 0)
                 {
                     if (Head == 1)
-                        res.Add(remainder+totalCoins);
+                        res.Add(remainder + totalCoins);
                     else if (Head == 2 && (remainder & (Head - 1)) == 0)
                     {
                         res.Add(remainder / Head + totalCoins);
@@ -177,16 +200,15 @@ namespace CoinsLib.CombinationCalculator.Cache
                         res.Add(remainder / Head + totalCoins);
                     }
                 }
-
-                //if (remainder > 0 && remainder % Head == 0)
-                  //  res.Add(remainder / Head + totalCoins);
             }
             else
             {
                 for (int i = 1; i <=remainder/Head;i++)
                 {
                     totalCoins++;
-                    parent.GenerateCache(value, remainder - i * Head, totalCoins,res);
+                    if (totalCoins > maxCoins)
+                        break;
+                    parent.GenerateCache2(value, remainder - i * Head, totalCoins,res,maxCoins);
                 }
             }
         }

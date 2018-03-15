@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using CoinsLib.Util;
 
@@ -53,19 +54,25 @@ namespace CoinsLib.CombinationCalculator.Cache
                     GetLevel(forest,thisLevel-1).Where(x=>x.IsParent(c)).ForEach(n=>n.AddChild(c));
             }
 
+            CalculationNode Select(Coin c, CalculationGrid grid)
+            {
+                return new CalculationNode(c, grid);
+            }
+            
             // take all combinations group by node-count, sort ascending and add-to forest
             // i.e., do lowest order - '1','2' before '1->6' etc. before '2->6->10' 
             allCombinations
                 .GroupBy(x => x.NodeCount())
                 .OrderBy(x => x.Key)                
-                .ForEach(x=>x.ForEach(n=>AddToForest(new CalculationNode(n,this),x.Key)));
+                .ForEach(x=>x.ForEach(n=>AddToForest(Select(n,this),x.Key)));
 
             allNodes = forest.SelectMany(x => x.GetAllNodes()).ToArray();
         }
         
-        public void CalculateTotalCoins(Int64[] results,int value)
+        public void CalculateTotalCoins(Int64[] results,int value,int maxCoins)
         {
-            allNodes.ForEach(x=>x.CalculateTotalCoins(value,results,value,0));
+            allNodes.ForEach(x=>x.Process(value,results,value,0,maxCoins));
+            allNodes.Where(x=>x.SupportsCache()).ForEach(x=>x.ProcessCache(value,results,maxCoins));
         }
 
     }
