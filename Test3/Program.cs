@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using CoinsLib.CombinationCalculator;
 using CoinsLib.CombinationCalculator.Underlying;
 using CoinsLib.Util;
 
 using System.Windows;
+
 namespace Test3
 {
     class Program
@@ -17,6 +21,17 @@ namespace Test3
         {
             //TestVector.TestThis();
 
+            var z3 = new Vector<short>(new short[] {1,2,3,4,5,6,7,8,0,0,0,0,0,0,0,0});
+
+            var mult = new Vector<short>(22);
+
+            var jg = Vector.Equals(z3, new Vector<short>(0));
+
+            var z4 = Vector.ConditionalSelect(jg,new Vector<short>(0),mult);
+            
+            Console.WriteLine(z4);
+
+            var p = new Vector<short>(67);
             TestVector.Vector();
 
             Console.ReadLine();

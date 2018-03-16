@@ -183,6 +183,13 @@ namespace CoinsLib.CombinationCalculator
                 }
             }
         }
+
+        public int GetMinimumCoins(int value,int total = 0)
+        {
+            if (Next == null)
+                return value / Units + total;
+            return Next.GetMinimumCoins(value - value/Units * Units, total + (value / Units));
+        }
         
         /// <summary>
         ///  how many nodes ... 
