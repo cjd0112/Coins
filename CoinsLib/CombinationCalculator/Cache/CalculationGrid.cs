@@ -69,11 +69,13 @@ namespace CoinsLib.CombinationCalculator.Cache
             allNodes = forest.SelectMany(x => x.GetAllNodes()).ToArray();
         }
         
-        public void CalculateTotalCoins(Int64[] results,int value,int maxCoins)
+        public Int64 CalculateTotalCoins(int value)
         {
-            allNodes.Where(x => x.Depth == 2).ForEach(x=>x.InitializeCache(value));
-            allNodes.ForEach(x=>x.Process(value,results,value,0,maxCoins));
-            allNodes.Where(x=>x.SupportsCache()).ForEach(x=>x.ProcessCache(value,results,maxCoins));
+            Int64 res = 0;
+            allNodes.Where(x => x.Depth == 100).ForEach(x=>x.InitializeCache(value));
+            allNodes.ForEach(x=>x.Process(value,ref res,value,1,0));
+            //allNodes.Where(x=>x.SupportsCache()).ForEach(x=>x.ProcessCache(value,results));
+            return res;
         }
 
     }
