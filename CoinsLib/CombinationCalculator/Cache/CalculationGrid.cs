@@ -73,7 +73,7 @@ namespace CoinsLib.CombinationCalculator.Cache
         {
             Int64 res = 0;
             allNodes.Where(x => x.Depth == 100).ForEach(x=>x.InitializeCache(value));
-            allNodes.ForEach(x=>x.Process(value,ref res,value,1,0));
+            allNodes.ForEach(x=>x.Process(value,ref res,value,new Stack2()));
             //allNodes.Where(x=>x.SupportsCache()).ForEach(x=>x.ProcessCache(value,results));
             return res;
         }

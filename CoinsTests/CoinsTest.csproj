@@ -59,6 +59,7 @@
     <Compile Include="ModOptimiser.cs" />
     <Compile Include="ValuePartitionerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WaysToShareTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoinsLib\CoinsLib.csproj">

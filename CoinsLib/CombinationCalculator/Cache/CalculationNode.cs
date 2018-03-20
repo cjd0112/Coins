@@ -102,9 +102,8 @@ namespace CoinsLib.CombinationCalculator.Cache
 
         protected List<CalculationNode> children = new List<CalculationNode>();
 
-        public void Process(int value, ref Int64 total,  int remainder, Func<int,int> calc, int totalCoins)
+        public void Process(int value, ref Int64 total,  int remainder, Stack2 state)
         {
-
             if (remainder != 0)
             {
                 if (parent == null)
@@ -113,15 +112,12 @@ namespace CoinsLib.CombinationCalculator.Cache
                     {                        
                         if (remainder % Head == 0)
                         {
-                            var tc = remainder / Head + totalCoins;
+                            var tc = remainder / Head + state.Sum();
                             if (tc % 2 == 0)
                             {
-                                var totalEach = tc / 2;
-
-                                if (multiplier == 1)
-                                    total += 1;
-                                else
-                                    total += multiplier;
+                                state.Push(remainder/Head);
+                                total += new ShareCoinsEvenly(100).WaysToShare(state);
+                                state.Pop();
                             }
                         }
                     }
@@ -135,18 +131,15 @@ namespace CoinsLib.CombinationCalculator.Cache
                             cache[remainder] = new int[maxValue];
 
                         }
-                        cache[remainder][totalCoins]++;
+                        cache[remainder][state.Sum()]++;
                     }
                     else
                     {
-                        if (Head == 6 && Depth == 3)
-                        {
-
-                        }
                         for (int i = 1; i <=remainder/Head;i++)
                         {
-                            totalCoins++;
-                            parent.Process(value,ref total,remainder - i * Head, (q)=>2*q,  totalCoins);
+                            state.Push(i);
+                            parent.Process(value, ref total, remainder - i * Head, state);
+                            state.Pop();
                         }                        
                     }
                 }

@@ -17,7 +17,7 @@ namespace Coins
         {
             try
             {
-                int num = 10;
+                int num = 21;
                 
                 var s = new Stopwatch();
 
