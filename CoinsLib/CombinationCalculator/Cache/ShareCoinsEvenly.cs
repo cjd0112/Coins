@@ -64,55 +64,40 @@ namespace CoinsLib.CombinationCalculator.Cache
         public int WaysToShare(Stack2 coins)
         {
 #if DEBUG
-
             if (coins.Sum() % 2 != 0)
                 throw new Exception($"Unexpected sum of coins - should be even number - received {coins.Sum()}");
 #endif
 
             // even, with only one set of coins ... one way to share - split down middle.
-            if (coins.Count == 1)
+            if (coins.Count() == 1)
                 return 1;
+            
+            // extract even amounts from odd
 
+            var (even, odd) = coins.SplitEvenOdd();
+            
+            if (odd.Count() % 2 == 1)
+                throw new Exception("Count of odd items is odd - which should not be the case");
+
+            return MergeBlocks(MergeBlocks(even), MergeBlocks(odd));
         }
 
-
-        int Process(Stack2 coins)
+        int MergeBlocks(Stack2 foo)
         {
-            var c = coins.Pop();
-            if (c % 2 == 0)
+            int blockRowTotal = 1;
+            foreach (var (left, right) in foo.GetPairs())
             {
-                return ProcessEvenSameType(c, Process(coins));
+                var thisHeight = Math.Max(left, right) + 1;
+
+                blockRowTotal = blockRowTotal * (thisHeight + (thisHeight / 2));
             }
-            else
-            {
-                var g = coins.Peek();
-                coins.UpdateHead(g-1);
-                ProcessWithBorrowedItem(c, g, Process(coins));
-            }
+
+            return blockRowTotal;
         }
 
-        int ProcessEvenSameType(int myCount, int rest)
+        int MergeBlocks(int left, int right)
         {
-#if DEBUG
-            if (myCount % 2 != 0)
-                throw new Exception("Invalid input to process even same type");
-#endif 
-            if (rest == 1)
-                return myCount + 1 * rest;
-            else
-                return myCount * rest;
+            return left * (right + (right / 2));
         }
-
-        int ProcessWithBorrowedItem(int c, int borrowedType, int ret)
-        {
-#if DEBUG
-            if (c + borrowedType % 2 != 0)
-                throw new Exception("Invalid input to process even same type");
-#endif 
-            return 
-
-
-        }
-
     }
 }

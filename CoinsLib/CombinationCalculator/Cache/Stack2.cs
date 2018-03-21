@@ -45,5 +45,34 @@ namespace CoinsLib.CombinationCalculator.Cache
         {
             return myStack.Sum();
         }
+
+        public int Count()
+        {
+            return myStack.Count();
+        }
+
+        public (Stack2 even, Stack2 odd) SplitEvenOdd()
+        {
+            return (new Stack2(myStack.Where(x => x % 2 == 0).ToArray()), new Stack2(myStack.Where(x => x % 2 != 0)
+                .ToArray()));
+        }
+
+
+        public IEnumerable<(int left, int right)> GetPairs()
+        {
+            if (myStack.Count() % 2 != 0)
+                throw new Exception("Expecting even number of items");
+
+            for (int i = 0; i < myStack.Count(); i+=2)
+            {
+                yield return (myStack[i], myStack[i + 1]);
+
+            }
+        }
+
+        public bool Any()
+        {
+            return Count() > 0;
+        }
     }
 }
