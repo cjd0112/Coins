@@ -45,5 +45,12 @@ namespace CoinsLib.CombinationCalculator.Cache
         {
             return myStack.Sum();
         }
+
+        public int Count()
+        {
+            return myStack.Count();
+        }
+
+
     }
 }

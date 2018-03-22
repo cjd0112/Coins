@@ -8,35 +8,8 @@ using CoinsLib.Coins;
 
 namespace CoinsLib.CombinationCalculator.Cache
 {
-    public class ArrayComparer: IEqualityComparer<int[]>
-    {
-        public bool Equals(int[] x, int[] y)
-        {
-            return x.SequenceEqual(y);
-        }
 
-        public int GetHashCode(int[] obj)
-        {
-            var n = obj.Length;
-            if (n == 1)
-                return obj[0];
-            if (n == 2)
-                return obj[0] | obj[1];
-            if (n == 3)
-                return obj[0] | obj[1] | obj[2];
-            if (n == 4)
-                return obj[0] | obj[1] | obj[2] | obj[3];
-            if (n == 5)
-                return obj[0] | obj[1] | obj[2] | obj[3] | obj[4];
-            if (n == 6)
-                return obj[0] | obj[1] | obj[2] | obj[3] | obj[4] | obj[5];
-            if (n == 7)
-                return obj[0] | obj[1] | obj[2] | obj[3] | obj[4] | obj[5] | obj[6];
-            throw new Exception("Unexpected array length");
-        }
-    }
-
-    public static class ShareCoinsEvenly
+    public static class ShareCoinsEvenly2
     {
         public static int TimesCalled = 0;
         public static int MaxWaysToShare = 0;
@@ -79,8 +52,6 @@ namespace CoinsLib.CombinationCalculator.Cache
 
             int target = coins.Sum() / 2;
 
-            res = WaysToShare2(target, q);
-
             var res = 0;
             if (c == 2)
             {
@@ -115,16 +86,6 @@ namespace CoinsLib.CombinationCalculator.Cache
 
             MaxWaysToShare = Math.Max(MaxWaysToShare, res);
             return res;
-
-        }
-
-        static int WaysToShare2(int target, int[] arr)
-        {
-            if (arr.Length == 0)
-                return 0;
-
-            if (arr.Length == 1)
-
 
         }
 
@@ -207,11 +168,25 @@ namespace CoinsLib.CombinationCalculator.Cache
         static int WaysToShare(int target, int a1, int b1, int c1, int d1, int e1,int f1)
         {
             int waysToShare = 0;
-            for (int a = 0; a <= a1; a++)
+            for (int a = 0; a <= a1 && a <= target; a++)
             {
-                waysToShare += WaysToShare(a, b1, c1, d1, e1, f1);
-            }
+                for (int b = 0; b <= b1 && a + b <= target; b++)
+                {
+                    for (int c = 0; c <= c1 && a + b + c <=target; c++)
+                    {
+                        for (int d = 0; d <= d1 && a + b + c + d <= target; d++)
+                        {
+                            for (int e = 0; e <= e1 && a + b + c + d + e <= target; e++)
+                            {
+                                var t = target - (e+d + c + b + a);
+                                if (t >= 0 && t <= f1)
+                                    waysToShare++;
 
+                            }
+                        }
+                    }
+                }
+            }
             return waysToShare;
         }
 
@@ -221,6 +196,25 @@ namespace CoinsLib.CombinationCalculator.Cache
             for (int a = 0; a <= a1 && a <= target; a++)
             {
                 waysToShare += WaysToShare(a, b1, c1, d1, e1, f1, g1);
+                for (int b = 0; b <= b1 && a + b <= target; b++)
+                {
+                    for (int c = 0; c <= c1 && a + b + c <= target; c++)
+                    {
+                        for (int d = 0; d <= d1 && a + b + c + d <= target; d++)
+                        {
+                            for (int e = 0; e <= e1 && a + b + c + d + e <= target; e++)
+                            {
+                                for (int f = 0; f <= f1 && a + b + c + d + e + f <= target; f++)
+                                {
+                                    var t = target - (f+e + d + c + b + a);
+                                    if (t >= 0 && t <= g1)
+                                        waysToShare++;
+
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return waysToShare;
         }

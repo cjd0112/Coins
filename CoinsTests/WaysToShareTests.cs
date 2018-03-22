@@ -12,71 +12,47 @@ namespace CoinsTest
     public class WaysToShareTests
     {
         [Test]
-        public void TestOddNoCoinsThrows()
+        public void TestOne()
         {
-            Assert.Throws<Exception>(() => { new ShareCoinsEvenly(100).WaysToShare(new Stack2(1, 2, 6));});
-        }
-
-        [Test]
-        public void TestSingleIsOne()
-        {
-            Assert.AreEqual(1, new ShareCoinsEvenly(100).WaysToShare(new Stack2(10)));
-        }
-
-        [Test]
-        public void TestTwoEvenCombinations()
-        {
-            Assert.AreEqual(2, new ShareCoinsEvenly(100).WaysToShare(new Stack2(1,1)));
-        }
-
-        [Test]
-        public void TestFourEvenCombinations()
-        {
-            Assert.AreEqual(6, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 1, 1,1,1 )));
+            Assert.AreEqual(1, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] {6})));
 
         }
 
         [Test]
-        public void TestSixEvenCombinations()
+        public void Test1x1()
         {
-            Assert.AreEqual(20, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 1, 1, 1, 1,1,1 )));
+            Assert.AreEqual(2, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] { 1,1 })));
 
         }
 
         [Test]
-        public void TestTwoByTwoCombinations()
+        public void Test2x2()
         {
-            Assert.AreEqual(3, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 2, 2)));
+            Assert.AreEqual(3, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] { 2, 2 })));
+
         }
 
         [Test]
-        public void TestThreeByThreeCombinations()
+        public void Test3x3()
         {
-            Assert.AreEqual(4, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 3, 3 )));
+            Assert.AreEqual(4, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] { 3, 3 })));
+
         }
 
         [Test]
-        public void TestFourByFourCombinations()
+        public void Test2x2x2()
         {
-            Assert.AreEqual(5, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 4, 4 )));
+            Assert.AreEqual(6, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] { 2, 2,2 })));
+
         }
 
         [Test]
-        public void TestTwoByFourCombinations()
+        public void Test1x1x2()
         {
-            Assert.AreEqual(3, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 2, 4 )));
+            Assert.AreEqual(4, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] { 1, 1, 2 })));
+
         }
 
-        [Test]
-        public void TestFourByTwoCombinations()
-        {
-            Assert.AreEqual(3, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 4,2 )));
-        }
 
-        [Test]
-        public void TestTwoSingletonsAndLongChain()
-        {
-            Assert.AreEqual(3, new ShareCoinsEvenly(100).WaysToShare(new Stack2( 1,1,6 )));
-        }
     }
 }

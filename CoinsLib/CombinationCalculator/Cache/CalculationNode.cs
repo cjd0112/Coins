@@ -102,7 +102,7 @@ namespace CoinsLib.CombinationCalculator.Cache
 
         protected List<CalculationNode> children = new List<CalculationNode>();
 
-        public void Process(int value, ref Int64 total,  int remainder, Stack2 state)
+        public void Process(int value, ref Int64 total,  int remainder, Stack<int> state)
         {
             if (remainder != 0)
             {
@@ -116,7 +116,7 @@ namespace CoinsLib.CombinationCalculator.Cache
                             if (tc % 2 == 0)
                             {
                                 state.Push(remainder/Head);
-                                total += new ShareCoinsEvenly(100).WaysToShare(state);
+                                total += ShareCoinsEvenly.WaysToShare(state);
                                 state.Pop();
                             }
                         }
