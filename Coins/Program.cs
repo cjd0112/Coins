@@ -18,17 +18,17 @@ namespace Coins
             try
             {
 
-                int num = 400;
+                int num = 100;
                 
                 var s = new Stopwatch();
 
                 s.Start();
                 
-                //var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
+                var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
-                //Console.WriteLine($"Correct res = {oldRes}");
+                Console.WriteLine($"Correct res = {oldRes}");
                 
-                //Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
+                Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
 
                 s.Stop();
                 
@@ -45,8 +45,6 @@ namespace Coins
                 s.Stop();
                 
                 Console.WriteLine($"Seconds = {s.ElapsedMilliseconds}");
-
-                Console.WriteLine($"max ways to share- {ShareCoinsEvenly.MaxWaysToShare}");
                 
 
             }

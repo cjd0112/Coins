@@ -28,6 +28,16 @@ namespace CoinsLib.CombinationCalculator.Cache
 
         private int[][] cache;
 
+        public CalculationNode GetParent()
+        {
+            return parent;
+        }
+
+        public int GetHead()
+        {
+            return Head;
+        }
+
 
         public bool SupportsCache()
         {
@@ -39,7 +49,7 @@ namespace CoinsLib.CombinationCalculator.Cache
             coin = c;
             SumOfUnits = c.GenerateMyUnits().Sum();
             Grid = grid;
-            Head = coin.Units;
+            Head = (int)coin.Units;
 
            ComboKey = Grid.ComboKey(this);
         }
@@ -115,7 +125,7 @@ namespace CoinsLib.CombinationCalculator.Cache
                             var tc = remainder / Head + state.Sum();
                             if (tc % 2 == 0)
                             {
-                                state.Push(remainder/Head);
+                                state.Push((int)(remainder/Head));
                                 total += ShareCoinsEvenly.WaysToShare(state);
                                 state.Pop();
                             }
@@ -138,7 +148,7 @@ namespace CoinsLib.CombinationCalculator.Cache
                         for (int i = 1; i <=remainder/Head;i++)
                         {
                             state.Push(i);
-                            parent.Process(value, ref total, remainder - i * Head, state);
+                            parent.Process(value, ref total, (int) (remainder - i * Head), state);
                             state.Pop();
                         }                        
                     }

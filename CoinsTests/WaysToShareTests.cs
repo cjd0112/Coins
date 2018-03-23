@@ -42,7 +42,7 @@ namespace CoinsTest
         [Test]
         public void Test2x2x2()
         {
-            Assert.AreEqual(6, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] { 2, 2,2 })));
+            Assert.AreEqual(7, ShareCoinsEvenly.WaysToShare(new Stack<int>(new[] { 2, 2,2 })));
 
         }
 

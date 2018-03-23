@@ -68,6 +68,11 @@ namespace CoinsLib.CombinationCalculator.Cache
 
             allNodes = forest.SelectMany(x => x.GetAllNodes()).ToArray();
         }
+
+        public IEnumerable<CalculationNode> GetAllNodes()
+        {
+            return allNodes;
+        }
         
         public Int64 CalculateTotalCoins(int value)
         {

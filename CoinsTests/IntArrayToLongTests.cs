@@ -15,7 +15,7 @@ namespace CoinsTest
         [Test]
         public void TestOne()
         {
-            var l = IntArrayToLong.ConvertToLong(new uint[] {20});
+            var l = IntArrayToLong.ConvertToLong(new int[] {20});
             var a = IntArrayToLong.ConvertFromLong(l);
             Assert.IsTrue(a.Length == 1);
             Assert.IsTrue(a[0]== 20);
@@ -24,7 +24,7 @@ namespace CoinsTest
         [Test]
         public void TestTwo()
         {
-            var l = IntArrayToLong.ConvertToLong(new uint[] { 204,298 });
+            var l = IntArrayToLong.ConvertToLong(new int[] { 204,298 });
             var a = IntArrayToLong.ConvertFromLong(l);
             Assert.IsTrue(a.Length == 2);
             Assert.IsTrue(a[0] == 204);
@@ -37,7 +37,7 @@ namespace CoinsTest
         [Test]
         public void TestThree()
         {
-            var l = IntArrayToLong.ConvertToLong(new uint[] { 20, 2,98 });
+            var l = IntArrayToLong.ConvertToLong(new int[] { 20, 2,98 });
             var a = IntArrayToLong.ConvertFromLong(l);
             Assert.IsTrue(a.Length == 3);
             Assert.IsTrue(a[0] == 20);
@@ -51,7 +51,7 @@ namespace CoinsTest
         [Test]
         public void TestFour()
         {
-            var l = IntArrayToLong.ConvertToLong(new uint[] { 1, 2, 27,98 });
+            var l = IntArrayToLong.ConvertToLong(new int[] { 1, 2, 27,98 });
             var a = IntArrayToLong.ConvertFromLong(l);
             Assert.IsTrue(a.Length == 4);
             Assert.IsTrue(a[0] == 1);
@@ -67,7 +67,7 @@ namespace CoinsTest
         [Test]
         public void TestFive()
         {
-            var l = IntArrayToLong.ConvertToLong(new uint[] { 14, 2, 27, 98,200 });
+            var l = IntArrayToLong.ConvertToLong(new int[] { 14, 2, 27, 98,200 });
             var a = IntArrayToLong.ConvertFromLong(l);
             Assert.IsTrue(a.Length == 5);
             Assert.IsTrue(a[0] == 14);
@@ -84,7 +84,7 @@ namespace CoinsTest
         [Test]
         public void TestSix()
         {
-            var l = IntArrayToLong.ConvertToLong(new uint[] { 14, 2, 27, 98, 200,1000 });
+            var l = IntArrayToLong.ConvertToLong(new int[] { 14, 2, 27, 98, 200,1000 });
             var a = IntArrayToLong.ConvertFromLong(l);
             Assert.IsTrue(a.Length == 6);
             Assert.IsTrue(a[0] == 14);
@@ -96,17 +96,34 @@ namespace CoinsTest
         }
 
         [Test]
+        public void TestSeven()
+        {
+            var l = IntArrayToLong.ConvertToLong(new int[] { 14, 2, 27, 98, 200, 1000,2000 });
+            var a = IntArrayToLong.ConvertFromLong(l);
+            Assert.IsTrue(a.Length == 7);
+            Assert.IsTrue(a[0] == 14);
+            Assert.IsTrue(a[1] == 2);
+            Assert.IsTrue(a[2] == 27);
+            Assert.IsTrue(a[3] == 98);
+            Assert.IsTrue(a[4] == 200);
+            Assert.IsTrue(a[5] == 1000);
+            Assert.IsTrue(a[6] == 2000);
+
+        }
+
+
+        [Test]
         public void TestOverflow()
         {
-            Assert.Catch<ArgumentOutOfRangeException>(() => { IntArrayToLong.ConvertToLong(new uint[] {256, 2, 27, 98, 200, 1000}); });
+            Assert.Catch<ArgumentOutOfRangeException>(() => { IntArrayToLong.ConvertToLong(new int[] {65, 2, 27, 98, 200, 1000}); });
         }
 
         [Test]
         public void TestJustUnderOverflowWorks()
         {
-            var l = IntArrayToLong.ConvertToLong(new uint[] { 255, 2, 27, 98, 200, 1000 });
+            var l = IntArrayToLong.ConvertToLong(new int[] { 64, 2, 27, 98, 200, 1000 });
             var a = IntArrayToLong.ConvertFromLong(l);
-            Assert.IsTrue(a[0] == 255);
+            Assert.IsTrue(a[0] == 64);
         }
 
 
