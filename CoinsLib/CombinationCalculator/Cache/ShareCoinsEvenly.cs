@@ -41,18 +41,8 @@ namespace CoinsLib.CombinationCalculator.Cache
         public static int TimesCalled = 0;
         public static int MaxWaysToShare = 0;
 
-        private static int[][] cache;
-
         public  static int WaysToShare(Stack<int> coins)
         {
-            if (cache == null)
-            {
-                cache = new int[4098][];
-                for (int i = 0; i < 4098; i++)
-                {
-                    cache[i] = new int[4098];
-                }
-            }
 
             TimesCalled++;
 #if DEBUG
@@ -78,8 +68,6 @@ namespace CoinsLib.CombinationCalculator.Cache
     //        }
 
             int target = coins.Sum() / 2;
-
-            res = WaysToShare2(target, q);
 
             var res = 0;
             if (c == 2)
@@ -118,29 +106,14 @@ namespace CoinsLib.CombinationCalculator.Cache
 
         }
 
-        static int WaysToShare2(int target, int[] arr)
-        {
-            if (arr.Length == 0)
-                return 0;
-
-            if (arr.Length == 1)
-
-
-        }
-
         static int WaysToShare(int target,int a1, int b1)
         {
-            if (cache[a1][b1] != 0)
-                return cache[a1][b1];
-
             int waysToShare = 0;
             for (int a = 0; a <= a1 && a <=target; a++)
             {
                 if (target-a <= b1)
                     waysToShare++;
             }
-
-            cache[a1][b1] = waysToShare;
 
             return waysToShare;
         }
@@ -152,8 +125,6 @@ namespace CoinsLib.CombinationCalculator.Cache
             int waysToShare = 0;
             for (int a = 0; a <= a1 && a <= target; a++)
             {
-                if (cache[b1][c1] != 0)
-                    return cache[b1][c1];
 
                 for (int b = 0; b <= b1 && a + b <= target; b++)
                 {

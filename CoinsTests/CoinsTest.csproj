@@ -54,6 +54,8 @@
     <Compile Include="CalculationGridTests.cs" />
     <Compile Include="CoinCalculator2Tests.cs" />
     <Compile Include="CoinCalculatorTests.cs" />
+    <Compile Include="IntArrayToLongTests.cs" />
+    <Compile Include="CoinMapTests.cs" />
     <Compile Include="CompressedCoinTests.cs" />
     <Compile Include="LSDParserTests.cs" />
     <Compile Include="ModOptimiser.cs" />
