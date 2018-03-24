@@ -48,11 +48,18 @@ namespace CoinsLib.CombinationCalculator.Cache
         }
 
 
-        public int ProcessCoinMapAndReturnFinalResult()
+        public long ProcessCoinMapAndReturnFinalResult()
         {
-            return map.IterateValues().
-                Select(x => (x.numberTimes, IntArrayToLong.ConvertFromLong(x.coins))).
-                Sum(x => x.Item1 * ShareCoinsEvenly.WaysToShare(x.Item2));
+            long res = 0;
+            foreach (var c in map.IterateValues().Select(x => (x.numberTimes, IntArrayToLong.ConvertFromLong(x.coins))))
+            {
+                res += c.Item1 * ShareCoinsEvenly.WaysToShare(c.Item2);
+            }
+            return res;
+
+//            return map.IterateValues().
+  //              Select(x => (x.numberTimes, IntArrayToLong.ConvertFromLong(x.coins))).
+    //            Sum(x => x.Item1 * ShareCoinsEvenly.WaysToShare(x.Item2));
         }
     }
 }

@@ -18,17 +18,17 @@ namespace Coins
             try
             {
 
-                int num = 202;
+                int num = 100;
                 
                 var s = new Stopwatch();
 
                 s.Start();
                 
-          //      var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
+              var oldRes = CoinCalculator2.CalculateTotalWaysToShare(num, CoinFactory.GenerateCoinStatic());
 
-            //    Console.WriteLine($"Correct res = {oldRes}");
+          Console.WriteLine($"Correct res = {oldRes}");
                 
-              //  Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
+          Console.WriteLine($"Time - {s.ElapsedMilliseconds/1000}");
 
                 s.Stop();
                 
@@ -36,11 +36,11 @@ namespace Coins
 
                 s.Start();
 
-                var coins = MagicPurse.GenerateCoinStatic();
+            //    var coins = MagicPurse.GenerateCoinStatic();
 
-                var calculationGrid = new CalculationGrid(coins.AllCombinations().ToArray(), num);
+            ////    var calculationGrid = new CalculationGrid(coins.AllCombinations().ToArray(), num);
 
-                Console.WriteLine("myres = " + calculationGrid.CalculateTotalCoins(num));                
+             //   Console.WriteLine("myres = " + calculationGrid.CalculateTotalCoins(num));                
 
                 s.Stop();
                 
@@ -48,6 +48,7 @@ namespace Coins
 
                 s = new Stopwatch();
 
+                s.Start();
                 var orchestrator = new CoinOrchestrator(num);
 
                 var res = orchestrator.Calculate();
@@ -57,6 +58,8 @@ namespace Coins
                 s.Stop();
 
                 Console.WriteLine($"Seconds = {s.ElapsedMilliseconds}");
+
+                Console.WriteLine($"Num duplicates: - {CoinMap.NumberDuplicates} - {CoinMap.NumberEntries}");
 
 
             }

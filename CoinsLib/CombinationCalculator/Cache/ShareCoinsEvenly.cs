@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Xml.Schema;
@@ -18,14 +19,12 @@ namespace CoinsLib.CombinationCalculator.Cache
         public  static int WaysToShare(int[] coins)
         {
 #if DEBUG
-
+            if (coins.Length > CoinFactory.MaxCoins)
+                throw new Exception($"Only support {CoinFactory.MaxCoins} at present");
+#endif
             if (coins.Sum() % 2 != 0)
                 return 0;
 
-            if (coins.Length > CoinFactory.MaxCoins)
-                throw new Exception($"Only support {CoinFactory.MaxCoins} at present");
-
-#endif
             var c = coins.Length;
             if (c== 1)
                 return 1;
@@ -70,7 +69,7 @@ namespace CoinsLib.CombinationCalculator.Cache
         static int WaysToShare(int target,int a1, int b1)
         {
             int waysToShare = 0;
-            for (int a = 0; a <= a1 && a <=target; a++)
+            for (int a = 0; a <= a1 ; a++)
             {
                 if (target-a <= b1)
                     waysToShare++;
@@ -84,9 +83,9 @@ namespace CoinsLib.CombinationCalculator.Cache
         static int WaysToShare(int target, int a1, int b1,int c1)
         {
             int waysToShare = 0;
-            for (int a = 0; a <= a1 && a <=target ; a++)
+            for (int a = 0; a <= a1 ; a++)
             {
-                for (int b = 0; b <= b1 && a + b <=target ; b++)
+                for (int b = 0; b <= b1 ; b++)
                 {
                     var t = target - (b + a);
                     if (t >= 0 && t <= c1)
@@ -101,11 +100,11 @@ namespace CoinsLib.CombinationCalculator.Cache
         static int WaysToShare(int target, int a1, int b1, int c1,int d1)
         {
             int waysToShare = 0;
-            for (int a = 0; a <= a1 && a <= target; a++)
+            for (int a = 0; a <= a1 ; a++)
             {
-                for (int b = 0; b <= b1 && a + b <= target; b++)
+                for (int b = 0; b <= b1 ; b++)
                 {
-                    for (int c = 0; c <= c1 && a + b +c <= target; c++)
+                    for (int c = 0; c <= c1 ; c++)
                     {
                         var t = target - (c+b + a);
                         if (t >= 0 && t <= d1)
@@ -119,13 +118,13 @@ namespace CoinsLib.CombinationCalculator.Cache
         static int WaysToShare(int target, int a1, int b1, int c1, int d1,int e1)
         {
             int waysToShare = 0;
-            for (int a = 0; a <= a1 && a <= target; a++)
+            for (int a = 0; a <= a1 ; a++)
             {
-                for (int b = 0; b <= b1 && a + b <=target; b++)
+                for (int b = 0; b <= b1 ; b++)
                 {
-                    for (int c = 0; c <= c1 && a + b + c <= target; c++)
+                    for (int c = 0; c <= c1 ; c++)
                     {
-                        for (int d = 0; d <= d1 && a + b + c + d <= target; d++)
+                        for (int d = 0; d <= d1 ; d++)
                         {
                             var t = target - (d+c + b + a);
                             if (t >= 0 && t <= e1)
@@ -140,15 +139,15 @@ namespace CoinsLib.CombinationCalculator.Cache
         static int WaysToShare(int target, int a1, int b1, int c1, int d1, int e1, int f1)
         {
             int waysToShare = 0;
-            for (int a = 0; a <= a1 && a <= target; a++)
+            for (int a = 0; a <= a1 ; a++)
             {
-                for (int b = 0; b <= b1 && a + b <= target; b++)
+                for (int b = 0; b <= b1 ; b++)
                 {
-                    for (int c = 0; c <= c1 && a + b + c <= target; c++)
+                    for (int c = 0; c <= c1 ; c++)
                     {
-                        for (int d = 0; d <= d1 && a + b + c + d <= target; d++)
+                        for (int d = 0; d <= d1 ; d++)
                         {
-                            for (int e = 0; e <= e1 && a + b + c + d + e <= target; e++)
+                            for (int e = 0; e <= e1 ; e++)
                             {
                                 var t = target - (e + d + c + b + a);
                                 if (t >= 0 && t <= f1)
@@ -165,17 +164,17 @@ namespace CoinsLib.CombinationCalculator.Cache
         static int WaysToShare(int target, int a1, int b1, int c1, int d1, int e1, int f1, int g1)
         {
             int waysToShare = 0;
-            for (int a = 0; a <= a1 && a <= target; a++)
+            for (int a = 0; a <= a1 ; a++)
             {
-                for (int b = 0; b <= b1 && a + b <= target; b++)
+                for (int b = 0; b <= b1 ; b++)
                 {
-                    for (int c = 0; c <= c1 && a + b + c <= target; c++)
+                    for (int c = 0; c <= c1 ; c++)
                     {
-                        for (int d = 0; d <= d1 && a + b + c + d <= target; d++)
+                        for (int d = 0; d <= d1 ; d++)
                         {
-                            for (int e = 0; e <= e1 && a + b + c + d + e <= target; e++)
+                            for (int e = 0; e <= e1 ; e++)
                             {
-                                for (int f = 0; f <= f1 && a + b + c + d + e + f <= target; f++)
+                                for (int f = 0; f <= f1 ; f++)
                                 {
                                     var t = target - (f + e + d + c + b + a);
                                     if (t >= 0 && t <= g1)
