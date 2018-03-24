@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace CoinsLib.CombinationCalculator.Cache
@@ -62,10 +63,11 @@ namespace CoinsLib.CombinationCalculator.Cache
                 for (int i = 1; i <= c.remainder/ node.GetHead(); i++)
                 {
                     thisStack.Push(i);
-                    var childRemainder = c.remainder - i * node.GetHead();
-                    if (childRemainder > 0 && childRemainder % node.GetParent().GetHead() == 0)
+                    var level1Remainder= c.remainder - i * node.GetHead();
+                    if (level1Remainder > 0 && level1Remainder% node.GetParent().GetHead() == 0)
                     {
-                        thisStack.Push(1);
+                        // add however many coins we can make at level 1
+                        thisStack.Push(level1Remainder/node.GetParent().GetHead());
                         globalState.Merge(c.coinState, thisStack.ToArray());
                         thisStack.Pop();
                     }

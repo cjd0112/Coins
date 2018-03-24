@@ -19,7 +19,8 @@ namespace CoinsLib.CombinationCalculator.Cache
         /// <summary>
         /// adds our 'finishing' state - which is the last two levels of coin counts
         /// to existing state -> which is all the coins at each level up to the last two levels. 
-        /// it sorts the array in ascending order
+        /// it checks that sum of coins is even - if not no point continuing ... 
+        /// it then sorts the array in ascending order
         /// it then converts it to our 'long' representation
         /// and adds it to our global CoinMap 
         /// this means at the end we have a compressed and de-duplicated list of 
@@ -38,8 +39,11 @@ namespace CoinsLib.CombinationCalculator.Cache
                 Array.Copy(arr,newArr,arr.Length);
                 newArr[arr.Length] = arrayFinalCoinsToAddToEachCompressedCoin[0];
                 newArr[arr.Length + 1] = arrayFinalCoinsToAddToEachCompressedCoin[1];
-                Array.Sort(newArr);
-                map.AddOrIncrementEntry(IntArrayToLong.ConvertToLong(newArr));
+                if (newArr.Sum() % 2 == 0)
+                {
+                    Array.Sort(newArr);
+                    map.AddOrIncrementEntry(IntArrayToLong.ConvertToLong(newArr));
+                }
             }
         }
 

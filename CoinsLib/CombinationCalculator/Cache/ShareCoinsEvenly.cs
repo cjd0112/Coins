@@ -167,7 +167,6 @@ namespace CoinsLib.CombinationCalculator.Cache
             int waysToShare = 0;
             for (int a = 0; a <= a1 && a <= target; a++)
             {
-                waysToShare += WaysToShare(a, b1, c1, d1, e1, f1, g1);
                 for (int b = 0; b <= b1 && a + b <= target; b++)
                 {
                     for (int c = 0; c <= c1 && a + b + c <= target; c++)
