@@ -20,7 +20,7 @@ namespace CoinsLib.CombinationCalculator.Cache
 #if DEBUG
 
             if (coins.Sum() % 2 != 0)
-                throw new Exception($"Unexpected sum of coins - should be even number - received {coins.Sum()}");
+                return 0;
 
             if (coins.Length > CoinFactory.MaxCoins)
                 throw new Exception($"Only support {CoinFactory.MaxCoins} at present");

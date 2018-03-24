@@ -28,6 +28,12 @@ namespace CoinsLib.CombinationCalculator.Cache
 
         private int[][] cache;
 
+        public CalculationGrid GetGrid()
+        {
+            return Grid;
+        }
+
+
         public CalculationNode GetParent()
         {
             return parent;

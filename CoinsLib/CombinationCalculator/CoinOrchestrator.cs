@@ -40,9 +40,28 @@ namespace CoinsLib.CombinationCalculator
 
         IEnumerable<MergedStateForNodesUpToLevelTwo>  SecondGenerateStateForAllCoinsUpToLevelTwo()
         {
-            return grid.GetAllNodes().Where(x => x.Depth > 1).ToArray().Select(x =>
-                    new MergedStateForNodesUpToLevelTwo(x).CollectCoinStateUpToLevelTwo((int) GrandNumber))
-                .ToArray();
+            CalculationNode GetParentAtDepth2(CalculationNode n)
+            {
+                if (n.Depth == 2)
+                    return n;
+                return GetParentAtDepth2(n.GetParent());
+            }
+
+            // create a state object for each level 2 object
+            var levelTwoNodes = grid.GetAllNodes().Where(x => x.Depth > 1).GroupBy(GetParentAtDepth2);
+
+            // apply it to each parent (+ level 2 object itself) ... which will recurse to 
+            // level 2 object collecting objects representing state of calculation along the way
+            foreach (var c in levelTwoNodes)
+            {
+                var mergedState = new MergedStateForNodesUpToLevelTwo(c.Key);
+                foreach (var q in c)
+                {
+                    q.CollectCoinStateUpToLevelTwo(GrandNumber,mergedState);
+                }
+
+                yield return mergedState;
+            }
         }
 
         MergedGlobalState ThirdGenerateLevelTwoNumberCoinsAndUpdateGlobalState(IEnumerable<MergedStateForNodesUpToLevelTwo> mergedlevelTwoState)
@@ -54,8 +73,7 @@ namespace CoinsLib.CombinationCalculator
 
         long FourthProcessMergedGlobalStateAndReturnFinalResult(MergedGlobalState globalState)
         {
-            GrandTotal += globalState.ProcessCoinMapAndReturnFinalResult();
-            return GrandTotal;
+            return globalState.ProcessCoinMapAndReturnFinalResult();
         }
     }
 }

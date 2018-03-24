@@ -21,6 +21,11 @@ namespace CoinsLib.CombinationCalculator.CalculationForest
         public string ComboKey;
 
         protected CalculationGrid Grid;
+
+        public CalculationGrid GetGrid()
+        {
+            return Grid;
+        }
         
         protected CalculationNode(Coin c,CalculationGrid grid)
         {

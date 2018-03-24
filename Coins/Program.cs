@@ -18,7 +18,7 @@ namespace Coins
             try
             {
 
-                int num = 100;
+                int num = 4;
                 
                 var s = new Stopwatch();
 
@@ -44,8 +44,20 @@ namespace Coins
 
                 s.Stop();
                 
-                Console.WriteLine($"Seconds = {s.ElapsedMilliseconds}");
-                
+                Console.WriteLine($"Seconds = {s.ElapsedMilliseconds/1000}");
+
+                s = new Stopwatch();
+
+                var orchestrator = new CoinOrchestrator(num);
+
+                var res = orchestrator.Calculate();
+
+                Console.WriteLine($"result22 = {res}");
+
+                s.Stop();
+
+                Console.WriteLine($"Seconds = {s.ElapsedMilliseconds/1000}");
+
 
             }
             catch (Exception e)

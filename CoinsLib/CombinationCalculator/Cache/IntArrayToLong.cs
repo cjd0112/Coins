@@ -90,6 +90,10 @@ namespace CoinsLib.CombinationCalculator.Cache
                 res = ((long)arr[0]) << 64 - gPos;
 
             }
+            else if (l == 0)
+            {
+                res = 0;
+            }
             else
             {
                 throw new Exception($"Invalid array length found - {0} - expected max 6");
@@ -103,6 +107,9 @@ namespace CoinsLib.CombinationCalculator.Cache
         // make public for testing
         public static int[] ConvertFromLong(long val)
         {
+            if (val == 0)
+                return new int[] { };
+
             long a = val >> 64 - aPos & aMask;
             long b = val >> 64 - bPos & bMask;
             long c = val >> 64 - cPos & cMask;

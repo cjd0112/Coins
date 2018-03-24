@@ -7,20 +7,20 @@ namespace CoinsLib.CombinationCalculator.Cache
 {
     public class MergedStateForNodesUpToLevelTwo
     {
-        private CalculationNode source;
+        private CalculationNode level2Node;
         private Stack<int> state;
         private int finalNodeRemainderToCalculate;
         private Dictionary<int, List<long>> remainderCoinStateList;
-        public MergedStateForNodesUpToLevelTwo(CalculationNode source)
+        public MergedStateForNodesUpToLevelTwo(CalculationNode level2Node)
         {
-            this.source = source;
+            this.level2Node = level2Node;
             state = new Stack<int>();
-            remainderCoinStateList = new Dictionary<int, List<long>>();
+            remainderCoinStateList = new Dictionary<int, List<long>>(level2Node.GetGrid().MaxValue);
         }
 
         public CalculationNode GetNode()
         {
-            return source;
+            return level2Node;
         }
 
         public void Push(int i)
@@ -53,12 +53,7 @@ namespace CoinsLib.CombinationCalculator.Cache
             }
         }
 
-        public MergedStateForNodesUpToLevelTwo CollectCoinStateUpToLevelTwo(int number)
-        {
-            GetNode().CollectCoinStateUpToLevelTwo(number,this);
-            return this;
-        }
-
+       
         public void FinishLevelTwoProcessingAndUpdateGlobalState(MergedGlobalState globalState)
         {
             GetNode().FinishLevelTwoProcessingAndUpdateGlobalState(this,globalState);
